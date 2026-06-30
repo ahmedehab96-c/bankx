@@ -36,7 +36,7 @@ dependencies:
   internet_connection_checker_plus: ^2.7.2
   intl: ^0.20.2
   json_annotation: ^4.9.0
-  local_auth: ^2.3.0
+  local_auth: ^3.0.1
   mobile_scanner: ^7.0.0
   path_provider: ^2.1.5
   pdf: ^3.11.3
