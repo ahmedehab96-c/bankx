@@ -10,7 +10,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  FLUTTER_VERSION: '3.27.0'
+  FLUTTER_VERSION: '3.38.1'
 
 jobs:
   secret-scan:

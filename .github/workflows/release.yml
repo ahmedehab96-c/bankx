@@ -30,7 +30,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  FLUTTER_VERSION: '3.27.0'
+  FLUTTER_VERSION: '3.38.1'
   BANKX_ENV: ${{ github.event.inputs.environment || 'production' }}
 
 jobs:
