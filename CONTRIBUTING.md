@@ -5,13 +5,13 @@ Thank you for your interest in contributing to BankX! This guide explains how to
 ## Before You Start
 
 1. Read [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
-2. Check existing [issues](https://github.com/ahmedehabmohammed/bankx/issues) and [pull requests](https://github.com/ahmedehabmohammed/bankx/pulls)
+2. Check existing [issues](https://github.com/ahmedehab96-c/bankx/issues) and [pull requests](https://github.com/ahmedehab96-c/bankx/pulls)
 3. For large changes, open an issue first to discuss the approach
 
 ## Development Setup
 
 ```bash
-git clone https://github.com/ahmedehabmohammed/bankx.git
+git clone https://github.com/ahmedehab96-c/bankx.git
 cd bankx
 flutter pub get
 dart run build_runner build --delete-conflicting-outputs
@@ -95,4 +95,4 @@ Update relevant docs when you change:
 
 ## Questions?
 
-Open a [Discussion](https://github.com/ahmedehabmohammed/bankx/discussions) or issue.
+Open a [Discussion](https://github.com/ahmedehab96-c/bankx/discussions) or issue.

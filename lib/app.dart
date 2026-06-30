@@ -86,26 +86,29 @@ class _BankXAppState extends State<BankXApp> {
           );
           return AccessibilityWrapper(
             config: accessibility,
-            child: AppLifecycleGuard(
-              child: SessionActivityDetector(
-                child: MaterialApp.router(
-                  title: 'BankX',
-                  debugShowCheckedModeBanner: false,
-                  theme: AppTheme.light(highContrast: appearance.highContrast),
-                  darkTheme:
-                      AppTheme.dark(highContrast: appearance.highContrast),
-                  themeMode: appearance.themeMode,
-                  locale: appearance.locale,
-                  supportedLocales: AppLocalizations.supportedLocales,
-                  localizationsDelegates: const [
-                    AppLocalizations.delegate,
-                    GlobalMaterialLocalizations.delegate,
-                    GlobalWidgetsLocalizations.delegate,
-                    GlobalCupertinoLocalizations.delegate,
-                  ],
-                  routerConfig: _router,
-                ),
-              ),
+            child: MaterialApp.router(
+              title: 'BankX',
+              debugShowCheckedModeBanner: false,
+              theme: AppTheme.light(highContrast: appearance.highContrast),
+              darkTheme:
+                  AppTheme.dark(highContrast: appearance.highContrast),
+              themeMode: appearance.themeMode,
+              locale: appearance.locale,
+              supportedLocales: AppLocalizations.supportedLocales,
+              localizationsDelegates: const [
+                AppLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              routerConfig: _router,
+              builder: (context, child) {
+                return AppLifecycleGuard(
+                  child: SessionActivityDetector(
+                    child: child ?? const SizedBox.shrink(),
+                  ),
+                );
+              },
             ),
           );
         },

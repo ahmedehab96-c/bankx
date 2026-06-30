@@ -31,6 +31,8 @@ Complete documentation for BankX.
 | Document | Audience | Description |
 |----------|----------|-------------|
 | [CICD.md](CICD.md) | DevOps | GitHub Actions pipelines |
+| [REMOTE_SETUP.md](REMOTE_SETUP.md) | DevOps | GitHub remote + Firebase CI secrets |
+| [FIREBASE_SETUP.md](FIREBASE_SETUP.md) | DevOps | Firebase project configuration |
 | [DEPLOYMENT.md](DEPLOYMENT.md) | DevOps | Play Store, App Store |
 | [BRANCHING.md](BRANCHING.md) | Team | GitFlow strategy |
 | [RELEASE_CHECKLIST.md](RELEASE_CHECKLIST.md) | Release engineer | Production checklist |

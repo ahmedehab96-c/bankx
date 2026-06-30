@@ -183,7 +183,7 @@ BankX is a **well-architected, production-style Flutter banking showcase** that 
 ### Weaknesses
 - Legacy folders increase onboarding confusion
 - No OpenAPI spec for backend contract
-- GitHub URLs use `ahmedehabmohammed/bankx`
+- [x] GitHub URLs use `ahmedehab96-c/bankx`
 
 ### Recommendations
 - Clean up legacy directories
@@ -285,7 +285,7 @@ BankX is a **well-architected, production-style Flutter banking showcase** that 
 ### P0 — Before public GitHub launch
 1. Fix 4 failing tests
 2. Capture 6+ screenshots for README
-3. ~~Replace `your-username` with actual GitHub username~~ Done (`ahmedehabmohammed`)
+3. ~~Replace GitHub username placeholder~~ Done (`ahmedehab96-c`)
 4. Add `docs/assets/logo.png`
 
 ### P1 — Within first week

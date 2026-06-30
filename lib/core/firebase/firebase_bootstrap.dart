@@ -14,7 +14,7 @@ abstract final class FirebaseBootstrap {
     try {
       await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
-      );
+      ).timeout(const Duration(seconds: 15));
       _initialized = true;
     } catch (e, st) {
       debugPrint('Firebase init skipped: $e\n$st');

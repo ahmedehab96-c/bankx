@@ -1,9 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 
-/// Firebase configuration — replace via `flutterfire configure`.
+/// Firebase configuration for project `bankx-app-c0958`.
 ///
-/// Set `--dart-define=FIREBASE_CONFIGURED=true` after adding platform config files.
+/// Platform files: `android/app/google-services.json`, `ios/Runner/GoogleService-Info.plist`
+/// Enable with `--dart-define=FIREBASE_CONFIGURED=true` (staging/production env JSON).
 class DefaultFirebaseOptions {
   static const bool isConfigured = bool.fromEnvironment(
     'FIREBASE_CONFIGURED',
@@ -23,24 +24,27 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'REPLACE_ME',
-    appId: 'REPLACE_ME',
-    messagingSenderId: 'REPLACE_ME',
-    projectId: 'REPLACE_ME',
+    apiKey: 'AIzaSyBu8T6MAeTXQJcda7qlxo_tgB11pzn0vBg',
+    appId: '1:184700813147:android:8e939a394a823118e1e47e',
+    messagingSenderId: '184700813147',
+    projectId: 'bankx-app-c0958',
+    storageBucket: 'bankx-app-c0958.firebasestorage.app',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'REPLACE_ME',
-    appId: 'REPLACE_ME',
-    messagingSenderId: 'REPLACE_ME',
-    projectId: 'REPLACE_ME',
+    apiKey: 'AIzaSyBu8T6MAeTXQJcda7qlxo_tgB11pzn0vBg',
+    appId: '1:184700813147:android:8e939a394a823118e1e47e',
+    messagingSenderId: '184700813147',
+    projectId: 'bankx-app-c0958',
+    storageBucket: 'bankx-app-c0958.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'REPLACE_ME',
-    appId: 'REPLACE_ME',
-    messagingSenderId: 'REPLACE_ME',
-    projectId: 'REPLACE_ME',
+    apiKey: 'AIzaSyAGDGOpkhKgB_nzNQxbDfVoLCF0KatEyC8',
+    appId: '1:184700813147:ios:55955d89bec707b5e1e47e',
+    messagingSenderId: '184700813147',
+    projectId: 'bankx-app-c0958',
+    storageBucket: 'bankx-app-c0958.firebasestorage.app',
     iosBundleId: 'com.bankx.bankx',
   );
 }

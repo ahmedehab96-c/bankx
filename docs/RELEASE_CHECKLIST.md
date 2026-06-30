@@ -35,7 +35,7 @@ Use before every production release and public GitHub launch.
 - [ ] Screenshots captured per [SCREENSHOTS.md](SCREENSHOTS.md) (min. 6 for README)
 - [ ] Demo GIF recorded per [DEMO_VIDEO_STORYBOARD.md](DEMO_VIDEO_STORYBOARD.md)
 - [ ] `docs/assets/logo.png` added
-- [x] Placeholder `your-username` replaced with `ahmedehabmohammed`
+- [x] GitHub username set to `ahmedehab96-c`
 - [ ] Portfolio content reviewed ([PORTFOLIO.md](PORTFOLIO.md))
 
 ## Assets & signing

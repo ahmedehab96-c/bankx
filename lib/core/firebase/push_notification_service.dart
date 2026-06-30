@@ -19,12 +19,18 @@ class PushNotificationService {
   PushNotificationService({
     FirebaseMessaging? messaging,
     FlutterLocalNotificationsPlugin? localNotifications,
-  })  : _messaging = messaging ?? FirebaseMessaging.instance,
+  })  : _messagingOverride = messaging,
         _localNotifications =
             localNotifications ?? FlutterLocalNotificationsPlugin();
 
-  final FirebaseMessaging _messaging;
+  final FirebaseMessaging? _messagingOverride;
+  FirebaseMessaging? _messaging;
   final FlutterLocalNotificationsPlugin _localNotifications;
+
+  FirebaseMessaging? get _client {
+    if (!FirebaseBootstrap.isInitialized) return null;
+    return _messagingOverride ?? (_messaging ??= FirebaseMessaging.instance);
+  }
 
   final List<RemoteMessage> _history = [];
 
@@ -34,7 +40,8 @@ class PushNotificationService {
   StreamSubscription<RemoteMessage>? _openedAppSub;
 
   Future<void> initialize({GoRouter? router}) async {
-    if (!FirebaseBootstrap.isInitialized) return;
+    final messaging = _client;
+    if (messaging == null) return;
 
     FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
@@ -51,13 +58,13 @@ class PushNotificationService {
       },
     );
 
-    await _messaging.requestPermission();
+    await messaging.requestPermission();
 
     _foregroundSub = FirebaseMessaging.onMessage.listen(_onForegroundMessage);
     _openedAppSub =
         FirebaseMessaging.onMessageOpenedApp.listen(_onOpenedApp);
 
-    final initial = await _messaging.getInitialMessage();
+    final initial = await messaging.getInitialMessage();
     if (initial != null) _onOpenedApp(initial);
   }
 

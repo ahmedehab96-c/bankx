@@ -157,7 +157,7 @@ lib/
 ### Clone & setup
 
 ```bash
-git clone https://github.com/ahmedehabmohammed/bankx.git
+git clone https://github.com/ahmedehab96-c/bankx.git
 cd bankx
 flutter pub get
 dart run build_runner build --delete-conflicting-outputs
@@ -179,7 +179,7 @@ chmod +x scripts/setup_firebase.sh
 ./scripts/setup_firebase.sh
 ```
 
-Full guide: [docs/FIREBASE_SETUP.md](docs/FIREBASE_SETUP.md) — place `google-services.json` and `GoogleService-Info.plist`, then run with `staging` or `production` env.
+Full guide: [docs/FIREBASE_SETUP.md](docs/FIREBASE_SETUP.md) — remote CI: [docs/REMOTE_SETUP.md](docs/REMOTE_SETUP.md)
 
 ## Running
 

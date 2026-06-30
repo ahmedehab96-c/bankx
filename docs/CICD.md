@@ -79,6 +79,8 @@ dcm analyze lib   # requires DCM CLI
 | `ANDROID_KEY_PASSWORD` | Key password |
 | `IOS_P12_BASE64` | Distribution certificate |
 | `IOS_P12_PASSWORD` | Certificate password |
+| `GOOGLE_SERVICES_JSON_BASE64` | `google-services.json` (base64) for CI builds |
+| `GOOGLE_SERVICE_INFO_PLIST_BASE64` | `GoogleService-Info.plist` (base64) for CI builds |
 | `FIREBASE_TOKEN` | Firebase CI token |
 | `FIREBASE_APP_ID_ANDROID` | Firebase Android app ID |
 | `FIREBASE_APP_ID_IOS` | Firebase iOS app ID |

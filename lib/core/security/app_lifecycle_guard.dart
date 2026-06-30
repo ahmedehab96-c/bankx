@@ -38,6 +38,8 @@ class _AppLifecycleGuardState extends State<AppLifecycleGuard>
   @override
   Widget build(BuildContext context) {
     return Stack(
+      alignment: Alignment.topLeft,
+      textDirection: TextDirection.ltr,
       children: [
         widget.child,
         if (_obscured)

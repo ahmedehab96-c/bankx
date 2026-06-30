@@ -41,7 +41,7 @@ All checks should pass for your target platform.
 
 ```bash
 # Clone
-git clone https://github.com/ahmedehabmohammed/bankx.git
+git clone https://github.com/ahmedehab96-c/bankx.git
 cd bankx
 
 # Dependencies

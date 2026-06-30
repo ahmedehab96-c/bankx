@@ -4,8 +4,8 @@ description: Issue template configuration
 blank_issues_enabled: false
 contact_links:
   - name: Documentation
-    url: https://github.com/ahmedehabmohammed/bankx/blob/main/docs/DEVELOPER_GUIDE.md
+    url: https://github.com/ahmedehab96-c/bankx/blob/main/docs/DEVELOPER_GUIDE.md
     about: Read the developer guide before opening an issue
   - name: Security Report
-    url: https://github.com/ahmedehabmohammed/bankx/blob/main/SECURITY.md
+    url: https://github.com/ahmedehab96-c/bankx/blob/main/SECURITY.md
     about: Report security vulnerabilities privately

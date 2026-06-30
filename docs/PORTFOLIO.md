@@ -183,7 +183,7 @@ Details: [TESTING.md](TESTING.md)
 
 | Resource | URL |
 |----------|-----|
-| GitHub | `https://github.com/ahmedehabmohammed/bankx` |
+| GitHub | `https://github.com/ahmedehab96-c/bankx` |
 | Live Demo | [Add TestFlight / APK link] |
 | Architecture | [ARCHITECTURE.md](ARCHITECTURE.md) |
 | API Docs | [API.md](API.md) |
