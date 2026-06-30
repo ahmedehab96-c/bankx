@@ -55,7 +55,7 @@ jobs:
       - name: Generate changelog
         run: ./scripts/generate_changelog.sh
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: release-metadata
           path: |
@@ -144,7 +144,7 @@ jobs:
             head -30 CHANGELOG.md 2>/dev/null || true
           } > RELEASE_NOTES.md
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: android-builds-${{ needs.version.outputs.version }}
           path: |
@@ -204,7 +204,7 @@ jobs:
           flutter build ipa --release $DEFINES \
             --export-options-plist=ios/ExportOptions.plist
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: ios-build-${{ needs.version.outputs.version }}
           path: build/ios/ipa/*.ipa
