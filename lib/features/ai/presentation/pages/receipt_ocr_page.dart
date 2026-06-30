@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../../core/ai/ai_config.dart';
 import '../../../../core/di/injection.dart';
+import '../../../../core/navigation/app_navigator.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/responsive.dart';
 import '../../domain/usecases/ai_usecases.dart';
 
-/// Receipt OCR — scan and extract merchant, amount, date, category.
+/// Receipt OCR — scan with ML Kit and extract merchant, amount, date, category.
 class ReceiptOcrPage extends StatefulWidget {
   const ReceiptOcrPage({super.key});
 
@@ -16,47 +18,86 @@ class ReceiptOcrPage extends StatefulWidget {
 
 class _ReceiptOcrPageState extends State<ReceiptOcrPage> {
   final _textController = TextEditingController();
+  final _picker = ImagePicker();
   bool _processing = false;
   String? _merchant;
   double? _amount;
   String? _category;
   DateTime? _date;
+  double? _confidence;
 
-  Future<void> _pickImage() async {
-    final picker = ImagePicker();
-    final image = await picker.pickImage(source: ImageSource.camera);
-    if (image == null) return;
-
-    // Demo: simulate OCR text extraction — replace with ML Kit in production
-    _textController.text =
-        '''
-STARBUCKS COFFEE
-Dubai Mall Branch
-Date: ${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}
-Total: 45.50 AED
-Thank you!
-''';
-    await _parse();
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
   }
 
-  Future<void> _parse() async {
+  Future<void> _scan(ImageSource source) async {
+    final image = await _picker.pickImage(
+      source: source,
+      imageQuality: 85,
+    );
+    if (image == null || !mounted) return;
+
     setState(() => _processing = true);
-    final useCase = getIt<ParseReceiptUseCase>();
-    final result = await useCase(_textController.text);
+    final useCase = getIt<ParseReceiptImageUseCase>();
+    final result = await useCase(image.path);
+    if (!mounted) return;
+
     result.fold(
-      (f) => setState(() => _processing = false),
+      (failure) {
+        setState(() => _processing = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(failure.message)),
+        );
+      },
+      (receipt) {
+        setState(() {
+          _processing = false;
+          _merchant = receipt.merchantName;
+          _amount = receipt.amount;
+          _category = receipt.category;
+          _date = receipt.date;
+          _confidence = receipt.confidence;
+          _textController.text = receipt.rawText;
+        });
+      },
+    );
+  }
+
+  Future<void> _parseManual() async {
+    if (_textController.text.trim().isEmpty) return;
+    setState(() => _processing = true);
+    final result = await getIt<ParseReceiptUseCase>()(_textController.text);
+    if (!mounted) return;
+
+    result.fold(
+      (failure) {
+        setState(() => _processing = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(failure.message)),
+        );
+      },
       (receipt) => setState(() {
         _processing = false;
         _merchant = receipt.merchantName;
         _amount = receipt.amount;
         _category = receipt.category;
         _date = receipt.date;
+        _confidence = receipt.confidence;
       }),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    if (!AiConfig.enabled) {
+      return Scaffold(
+        appBar: AppBar(title: const Text('Receipt Scanner')),
+        body: const Center(child: Text('AI features are disabled.')),
+      );
+    }
+
     final padding = Responsive.horizontalPadding(context);
 
     return Scaffold(
@@ -64,23 +105,46 @@ Thank you!
       body: ListView(
         padding: EdgeInsets.all(padding),
         children: [
-          FilledButton.icon(
-            onPressed: _pickImage,
-            icon: const Icon(Icons.camera_alt_outlined),
-            label: const Text('Scan Receipt'),
+          Row(
+            children: [
+              Expanded(
+                child: FilledButton.icon(
+                  onPressed: _processing ? null : () => _scan(ImageSource.camera),
+                  icon: const Icon(Icons.camera_alt_outlined),
+                  label: const Text('Camera'),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: OutlinedButton.icon(
+                  onPressed: _processing
+                      ? null
+                      : () => _scan(ImageSource.gallery),
+                  icon: const Icon(Icons.photo_library_outlined),
+                  label: const Text('Gallery'),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Powered by on-device ML Kit OCR',
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: Theme.of(context).hintColor,
+            ),
           ),
           const SizedBox(height: 16),
           TextField(
             controller: _textController,
             maxLines: 6,
             decoration: const InputDecoration(
-              labelText: 'Receipt text (OCR output)',
+              labelText: 'Receipt text (editable)',
               border: OutlineInputBorder(),
             ),
           ),
           const SizedBox(height: 12),
           OutlinedButton(
-            onPressed: _processing ? null : _parse,
+            onPressed: _processing ? null : _parseManual,
             child: _processing
                 ? const SizedBox(
                     width: 20,
@@ -91,6 +155,14 @@ Thank you!
           ),
           if (_merchant != null) ...[
             const SizedBox(height: 24),
+            if (_confidence != null)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: Text(
+                  'Confidence: ${(_confidence! * 100).toStringAsFixed(0)}%',
+                  style: Theme.of(context).textTheme.labelLarge,
+                ),
+              ),
             _ResultCard(
               icon: Icons.store_outlined,
               label: 'Merchant',
@@ -110,6 +182,12 @@ Thank you!
               icon: Icons.calendar_today_outlined,
               label: 'Date',
               value: _date?.toString().split(' ').first ?? '',
+            ),
+            const SizedBox(height: 12),
+            FilledButton.icon(
+              onPressed: () => context.pushBudget(),
+              icon: const Icon(Icons.savings_outlined),
+              label: const Text('Add to Budget Tracking'),
             ),
           ],
         ],

@@ -1,48 +1,52 @@
+import '../datasources/fx_rates_remote_data_source.dart';
 import '../models/ai_models.dart';
 
-/// Multi-currency conversion with live-rate architecture.
+/// Multi-currency conversion with live-rate support and static fallback.
 class CurrencyConverter {
-  const CurrencyConverter();
+  CurrencyConverter({FxRatesRemoteDataSource? fxRates})
+    : _fxRates = fxRates ?? FxRatesRemoteDataSource();
 
-  static const supported = [
-    SupportedCurrency(
-      code: 'AED',
-      name: 'UAE Dirham',
-      symbol: 'د.إ',
-      rateToAed: 1.0,
-    ),
-    SupportedCurrency(
-      code: 'USD',
-      name: 'US Dollar',
-      symbol: '\$',
-      rateToAed: 3.6725,
-    ),
-    SupportedCurrency(code: 'EUR', name: 'Euro', symbol: '€', rateToAed: 3.98),
-    SupportedCurrency(
-      code: 'SAR',
-      name: 'Saudi Riyal',
-      symbol: 'ر.س',
-      rateToAed: 0.979,
-    ),
-    SupportedCurrency(
-      code: 'QAR',
-      name: 'Qatari Riyal',
-      symbol: 'ر.ق',
-      rateToAed: 1.008,
-    ),
-    SupportedCurrency(
-      code: 'KWD',
-      name: 'Kuwaiti Dinar',
-      symbol: 'د.ك',
-      rateToAed: 11.95,
-    ),
-  ];
+  final FxRatesRemoteDataSource _fxRates;
 
-  List<SupportedCurrency> get currencies => supported;
+  static const _metadata = {
+    'AED': ('UAE Dirham', 'د.إ'),
+    'USD': ('US Dollar', r'$'),
+    'EUR': ('Euro', '€'),
+    'SAR': ('Saudi Riyal', 'ر.س'),
+    'QAR': ('Qatari Riyal', 'ر.ق'),
+    'KWD': ('Kuwaiti Dinar', 'د.ك'),
+  };
+
+  static const _fallbackRates = {
+    'AED': 1.0,
+    'USD': 3.6725,
+    'EUR': 3.98,
+    'SAR': 0.979,
+    'QAR': 1.008,
+    'KWD': 11.95,
+  };
+
+  static final List<SupportedCurrency> _fallbackCurrencies = _metadata.entries
+      .map(
+        (e) => SupportedCurrency(
+          code: e.key,
+          name: e.value.$1,
+          symbol: e.value.$2,
+          rateToAed: _fallbackRates[e.key]!,
+        ),
+      )
+      .toList();
+
+  List<SupportedCurrency> _cached = _fallbackCurrencies;
+  DateTime? _lastFetched;
+
+  List<SupportedCurrency> get currencies => _cached;
+  DateTime? get lastFetched => _lastFetched;
+  bool get hasLiveRates => _lastFetched != null;
 
   SupportedCurrency? find(String code) {
     try {
-      return supported.firstWhere(
+      return _cached.firstWhere(
         (c) => c.code.toUpperCase() == code.toUpperCase(),
       );
     } catch (_) {
@@ -55,15 +59,32 @@ class CurrencyConverter {
     required String fromCode,
     required String toCode,
   }) {
-    final from = find(fromCode) ?? supported.first;
-    final to = find(toCode) ?? supported.first;
+    final from = find(fromCode) ?? _cached.first;
+    final to = find(toCode) ?? _cached.first;
     final inAed = amount * from.rateToAed;
     return inAed / to.rateToAed;
   }
 
-  /// Placeholder for live rates API — swap implementation in production.
   Future<List<SupportedCurrency>> fetchLiveRates() async {
-    await Future<void>.delayed(const Duration(milliseconds: 300));
-    return supported;
+    try {
+      final live = await _fxRates.fetchRatesToAed();
+      _cached = _metadata.entries
+          .map((e) {
+            final code = e.key;
+            final rate = live[code] ?? _fallbackRates[code]!;
+            return SupportedCurrency(
+              code: code,
+              name: e.value.$1,
+              symbol: e.value.$2,
+              rateToAed: rate,
+            );
+          })
+          .toList();
+      _lastFetched = DateTime.now();
+      return _cached;
+    } catch (_) {
+      _cached = _fallbackCurrencies;
+      return _cached;
+    }
   }
 }

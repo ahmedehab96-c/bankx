@@ -10,7 +10,12 @@ abstract class AiRepository {
     double? balance,
   });
 
-  Stream<AiStreamChunk> chatStream({required String message, String locale});
+  Stream<AiStreamChunk> chatStream({
+    required String message,
+    String locale = 'en',
+    String? userName,
+    double? balance,
+  });
 
   ResultFuture<SpendingAnalysis> getSpendingAnalysis();
   ResultFuture<List<BudgetPlan>> getBudgets();
@@ -20,6 +25,7 @@ abstract class AiRepository {
   ResultFuture<List<SmartAlert>> getSmartAlerts(double balance);
   ResultFuture<SmartSearchResult> smartSearch(String query);
   ResultFuture<ParsedReceipt> parseReceipt(String rawText);
+  ResultFuture<ParsedReceipt> parseReceiptImage(String imagePath);
   ResultFuture<VoiceCommand> parseVoiceCommand(String text, String locale);
   ResultFuture<List<SupportedCurrency>> getCurrencies();
   ResultFuture<double> convertCurrency({

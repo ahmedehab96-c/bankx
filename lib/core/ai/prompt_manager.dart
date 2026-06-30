@@ -41,6 +41,7 @@ If unsure, suggest contacting bank support.
     required List<AiMessage> history,
     String locale = 'en',
     Map<String, dynamic>? context,
+    String? knowledgeContext,
   }) {
     final messages = <AiMessage>[
       AiMessage(
@@ -57,6 +58,17 @@ If unsure, suggest contacting bank support.
           id: 'context',
           role: AiMessageRole.system,
           content: 'User context: $context',
+          timestamp: DateTime.now(),
+        ),
+      );
+    }
+
+    if (knowledgeContext != null && knowledgeContext.isNotEmpty) {
+      messages.add(
+        AiMessage(
+          id: 'knowledge',
+          role: AiMessageRole.system,
+          content: knowledgeContext,
           timestamp: DateTime.now(),
         ),
       );

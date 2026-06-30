@@ -10,6 +10,7 @@
   "BANKX_AI_PROVIDER": "mock",
   "BANKX_AI_API_URL": "",
   "BANKX_AI_API_KEY": "",
+  "BANKX_AI_MODEL": "gpt-4o-mini",
   "BANKX_AI_MAX_TOKENS": "2048",
   "BANKX_AI_CACHE_TTL_MINUTES": "30"
 }

@@ -7,6 +7,8 @@ import 'models/ai_models.dart';
 import 'prompt_manager.dart';
 import 'providers/http_ai_provider.dart';
 import 'providers/mock_ai_provider.dart';
+import 'providers/open_ai_provider.dart';
+import 'rag/rag_service.dart';
 import 'token_usage_monitor.dart';
 
 /// Central AI orchestrator — caching, retry, streaming, provider selection.
@@ -14,29 +16,38 @@ class AiOrchestrator {
   AiOrchestrator({
     required MockAiProvider mockProvider,
     required HttpAiProvider httpProvider,
+    required OpenAiProvider openAiProvider,
     required AiCacheService cache,
     required ConversationHistoryService history,
     required TokenUsageMonitor tokenMonitor,
+    RagService? ragService,
     PromptManager? promptManager,
     AiContextManager? contextManager,
   }) : _mockProvider = mockProvider,
        _httpProvider = httpProvider,
+       _openAiProvider = openAiProvider,
        _cache = cache,
        _history = history,
        _tokenMonitor = tokenMonitor,
+       _ragService = ragService ?? const RagService(),
        _promptManager = promptManager ?? const PromptManager(),
        _contextManager = contextManager ?? const AiContextManager();
 
   final MockAiProvider _mockProvider;
   final HttpAiProvider _httpProvider;
+  final OpenAiProvider _openAiProvider;
   final AiCacheService _cache;
   final ConversationHistoryService _history;
   final TokenUsageMonitor _tokenMonitor;
+  final RagService _ragService;
   final PromptManager _promptManager;
   final AiContextManager _contextManager;
 
-  AiProvider get _provider =>
-      AiConfig.useRemoteProvider ? _httpProvider : _mockProvider;
+  AiProvider get _provider {
+    if (AiConfig.useOpenAiProvider) return _openAiProvider;
+    if (AiConfig.useCustomHttpProvider) return _httpProvider;
+    return _mockProvider;
+  }
 
   MockAiProvider get mockProvider => _mockProvider;
 
@@ -67,11 +78,15 @@ class AiOrchestrator {
     }
 
     final history = await _history.load();
+    final knowledge = AiConfig.ragEnabled
+        ? _ragService.buildKnowledgeContext(userMessage, locale: locale)
+        : '';
     final messages = _promptManager.buildChatMessages(
       userMessage: userMessage,
       history: history,
       locale: locale,
       context: context,
+      knowledgeContext: knowledge.isEmpty ? null : knowledge,
     );
 
     AiResponse response;
@@ -124,20 +139,73 @@ class AiOrchestrator {
     String locale = 'en',
     Map<String, dynamic>? context,
   }) async* {
+    if (!AiConfig.enabled) {
+      yield const AiStreamChunk(
+        delta: 'AI features are disabled. Enable BANKX_ENABLE_AI in config.',
+        isDone: true,
+      );
+      return;
+    }
+
+    if (_tokenMonitor.isDailyLimitReached) {
+      yield const AiStreamChunk(
+        delta: 'Daily AI usage limit reached. Please try again tomorrow.',
+        isDone: true,
+      );
+      return;
+    }
+
     final history = await _history.load();
+    final knowledge = AiConfig.ragEnabled
+        ? _ragService.buildKnowledgeContext(userMessage, locale: locale)
+        : '';
     final messages = _promptManager.buildChatMessages(
       userMessage: userMessage,
       history: history,
       locale: locale,
       context: context,
+      knowledgeContext: knowledge.isEmpty ? null : knowledge,
     );
 
-    await for (final chunk in _provider.stream(messages: messages)) {
-      if (chunk.tokensUsed != null) {
-        _tokenMonitor.recordUsage(chunk.tokensUsed!);
+    final buffer = StringBuffer();
+    try {
+      await for (final chunk in _provider.stream(messages: messages)) {
+        if (chunk.tokensUsed != null) {
+          _tokenMonitor.recordUsage(chunk.tokensUsed!);
+        }
+        if (chunk.delta.isNotEmpty) buffer.write(chunk.delta);
+        yield chunk;
+        if (chunk.isDone) break;
       }
-      yield chunk;
+    } catch (_) {
+      await for (final chunk in _mockProvider.stream(messages: messages)) {
+        if (chunk.delta.isNotEmpty) buffer.write(chunk.delta);
+        yield chunk;
+        if (chunk.isDone) break;
+      }
     }
+
+    final content = buffer.toString();
+    if (content.isEmpty) return;
+
+    _tokenMonitor.recordUsage(content.length ~/ 4);
+
+    await _history.append(
+      AiMessage(
+        id: _history.newMessageId(),
+        role: AiMessageRole.user,
+        content: userMessage,
+        timestamp: DateTime.now(),
+      ),
+    );
+    await _history.append(
+      AiMessage(
+        id: _history.newMessageId(),
+        role: AiMessageRole.assistant,
+        content: content,
+        timestamp: DateTime.now(),
+      ),
+    );
   }
 
   Map<String, dynamic> buildContext({

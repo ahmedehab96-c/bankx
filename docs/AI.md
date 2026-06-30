@@ -85,18 +85,23 @@ abstract class AiProvider {
 | Provider | When used |
 |----------|-----------|
 | `MockAiProvider` | Default — offline, no API key |
-| `HttpAiProvider` | When `BANKX_AI_API_URL` + `BANKX_AI_API_KEY` set |
+| `OpenAiProvider` | When `BANKX_AI_PROVIDER=openai` + `BANKX_AI_API_KEY` |
+| `HttpAiProvider` | When custom `BANKX_AI_API_URL` + `BANKX_AI_API_KEY` |
 
 ## Environment Variables
 
 | Variable | Default | Purpose |
 |----------|---------|---------|
 | `BANKX_ENABLE_AI` | `true` | Master AI feature flag |
-| `BANKX_AI_PROVIDER` | `mock` | Provider identifier |
+| `BANKX_AI_PROVIDER` | `mock` | Provider: `mock`, `openai`, or custom HTTP |
+| `BANKX_AI_MODEL` | `gpt-4o-mini` | OpenAI model name |
 | `BANKX_AI_API_URL` | `""` | Remote AI backend URL |
 | `BANKX_AI_API_KEY` | `""` | API key (GitHub Secret) |
 | `BANKX_AI_MAX_TOKENS` | `2048` | Per-request token limit |
-| `BANKX_AI_CACHE_TTL_MINUTES` | `30` | Response cache TTL |
+| `BANKX_FX_API_URL` | `https://open.er-api.com/v6/latest/AED` | Live FX rates (free, no key) |
+| `BANKX_AI_RAG_ENABLED` | `true` | Inject banking knowledge into prompts |
+| `BANKX_AI_CERT_PIN_ENABLED` | `false` | TLS certificate pinning for AI API |
+| `BANKX_AI_CERT_PINS` | `""` | Comma-separated SHA-256 cert fingerprints |
 
 ## Security
 
@@ -166,6 +171,8 @@ lib/features/ai/
 
 ## Related Docs
 
+- [RAG.md](RAG.md) — banking knowledge retrieval
+- [AI_PROXY.md](AI_PROXY.md) — production OpenAI proxy
 - [ARCHITECTURE.md](ARCHITECTURE.md)
 - [ENVIRONMENT.md](ENVIRONMENT.md)
 - [AI_ENTERPRISE_REVIEW.md](AI_ENTERPRISE_REVIEW.md)

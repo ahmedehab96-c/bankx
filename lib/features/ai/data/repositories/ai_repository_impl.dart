@@ -10,6 +10,7 @@ import '../../../../core/ai/engines/smart_alerts_engine.dart';
 import '../../../../core/ai/engines/smart_search_engine.dart';
 import '../../../../core/ai/engines/spending_analyzer.dart';
 import '../../../../core/ai/engines/voice_command_parser.dart';
+import '../../../../core/ai/services/receipt_ocr_service.dart';
 import '../../../../core/ai/models/ai_models.dart';
 import '../../../../core/errors/failures.dart';
 import '../../../../core/storage/cache_storage_service.dart';
@@ -30,6 +31,7 @@ class AiRepositoryImpl implements AiRepository {
     SmartSearchEngine? searchEngine,
     VoiceCommandParser? voiceParser,
     ReceiptParser? receiptParser,
+    ReceiptOcrService? receiptOcrService,
     CurrencyConverter? currencyConverter,
     FraudDetector? fraudDetector,
     CacheStorageService? cache,
@@ -42,7 +44,8 @@ class AiRepositoryImpl implements AiRepository {
        _searchEngine = searchEngine ?? const SmartSearchEngine(),
        _voiceParser = voiceParser ?? const VoiceCommandParser(),
        _receiptParser = receiptParser ?? const ReceiptParser(),
-       _currencyConverter = currencyConverter ?? const CurrencyConverter(),
+       _receiptOcr = receiptOcrService ?? ReceiptOcrService(),
+       _currencyConverter = currencyConverter ?? CurrencyConverter(),
        _fraudDetector = fraudDetector ?? const FraudDetector(),
        _cache = cache;
 
@@ -55,6 +58,7 @@ class AiRepositoryImpl implements AiRepository {
   final SmartSearchEngine _searchEngine;
   final VoiceCommandParser _voiceParser;
   final ReceiptParser _receiptParser;
+  final ReceiptOcrService _receiptOcr;
   final CurrencyConverter _currencyConverter;
   final FraudDetector _fraudDetector;
   final CacheStorageService? _cache;
@@ -107,7 +111,21 @@ class AiRepositoryImpl implements AiRepository {
   Stream<AiStreamChunk> chatStream({
     required String message,
     String locale = 'en',
-  }) => _orchestrator.chatStream(userMessage: message, locale: locale);
+    String? userName,
+    double? balance,
+  }) async* {
+    final txs = await _loadTransactions();
+    _syncMockContext(txs, balance: balance ?? 0, name: userName);
+    yield* _orchestrator.chatStream(
+      userMessage: message,
+      locale: locale,
+      context: _orchestrator.buildContext(
+        userName: userName,
+        totalBalance: balance,
+        recentTransactions: txs,
+      ),
+    );
+  }
 
   @override
   ResultFuture<SpendingAnalysis> getSpendingAnalysis() async {
@@ -221,6 +239,19 @@ class AiRepositoryImpl implements AiRepository {
   @override
   ResultFuture<ParsedReceipt> parseReceipt(String rawText) async {
     return Right(_receiptParser.parse(rawText));
+  }
+
+  @override
+  ResultFuture<ParsedReceipt> parseReceiptImage(String imagePath) async {
+    try {
+      final text = await _receiptOcr.extractTextFromImage(imagePath);
+      if (text.isEmpty) {
+        return const Left(ServerFailure('No text detected on receipt image.'));
+      }
+      return Right(_receiptParser.parse(text));
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
   }
 
   @override

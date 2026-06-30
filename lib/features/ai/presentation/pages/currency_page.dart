@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/ai/engines/currency_converter.dart';
 import '../../../../core/di/injection.dart';
 import '../../../../core/utils/responsive.dart';
 import '../../../../core/utils/usecase.dart';
@@ -20,6 +21,7 @@ class _CurrencyPageState extends State<CurrencyPage> {
   double _result = 0;
   List<({String code, String name, String symbol, double rate})> _currencies =
       [];
+  bool _liveRates = false;
 
   @override
   void initState() {
@@ -30,8 +32,10 @@ class _CurrencyPageState extends State<CurrencyPage> {
   Future<void> _loadCurrencies() async {
     final useCase = getIt<GetCurrenciesUseCase>();
     final result = await useCase(const NoParams());
+    final converter = getIt<CurrencyConverter>();
     result.fold((_) {}, (list) {
       setState(() {
+        _liveRates = converter.hasLiveRates;
         _currencies = list
             .map(
               (c) => (
@@ -61,7 +65,19 @@ class _CurrencyPageState extends State<CurrencyPage> {
     final padding = Responsive.horizontalPadding(context);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Currency Converter')),
+      appBar: AppBar(
+        title: const Text('Currency Converter'),
+        actions: [
+          if (_liveRates)
+            const Padding(
+              padding: EdgeInsets.only(right: 12),
+              child: Chip(
+                label: Text('Live rates'),
+                avatar: Icon(Icons.wifi, size: 16),
+              ),
+            ),
+        ],
+      ),
       body: ListView(
         padding: EdgeInsets.all(padding),
         children: [

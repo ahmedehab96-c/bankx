@@ -30,8 +30,39 @@ abstract final class AiConfig {
     defaultValue: 30,
   );
 
-  static bool get useRemoteProvider =>
-      enabled && apiUrl.isNotEmpty && apiKey.isNotEmpty;
+  static const String fxApiUrl = String.fromEnvironment(
+    'BANKX_FX_API_URL',
+    defaultValue: 'https://open.er-api.com/v6/latest/AED',
+  );
+
+  static const String model = String.fromEnvironment(
+    'BANKX_AI_MODEL',
+    defaultValue: 'gpt-4o-mini',
+  );
+
+  static const bool certPinningEnabled = bool.fromEnvironment(
+    'BANKX_AI_CERT_PIN_ENABLED',
+    defaultValue: false,
+  );
+
+  /// Comma-separated SHA-256 hex fingerprints of the AI API certificate.
+  static const String certPins = String.fromEnvironment(
+    'BANKX_AI_CERT_PINS',
+    defaultValue: '',
+  );
+
+  static const bool ragEnabled = bool.fromEnvironment(
+    'BANKX_AI_RAG_ENABLED',
+    defaultValue: true,
+  );
+
+  static bool get useOpenAiProvider =>
+      enabled && provider.toLowerCase() == 'openai' && apiKey.isNotEmpty;
+
+  static bool get useCustomHttpProvider =>
+      enabled && apiUrl.isNotEmpty && apiKey.isNotEmpty && !useOpenAiProvider;
+
+  static bool get useRemoteProvider => useOpenAiProvider || useCustomHttpProvider;
 
   static bool get useMockProvider => !useRemoteProvider;
 }

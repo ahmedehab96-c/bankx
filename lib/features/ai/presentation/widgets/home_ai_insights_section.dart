@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/ai/ai_config.dart';
 import '../../../../core/di/injection.dart';
 import '../../../../core/navigation/app_navigator.dart';
 import '../../../../core/widgets/ai_insights_card.dart';
@@ -23,7 +24,7 @@ class _HomeAiInsightsSectionState extends State<HomeAiInsightsSection> {
   @override
   void initState() {
     super.initState();
-    _load();
+    if (AiConfig.enabled) _load();
   }
 
   Future<void> _load() async {
@@ -42,7 +43,9 @@ class _HomeAiInsightsSectionState extends State<HomeAiInsightsSection> {
 
   @override
   Widget build(BuildContext context) {
-    if (_summary == null) return const SizedBox.shrink();
+    if (!AiConfig.enabled || _summary == null) {
+      return const SizedBox.shrink();
+    }
 
     return AiInsightsCard(
       summary: _summary!,

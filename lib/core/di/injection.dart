@@ -95,9 +95,14 @@ import '../ai/ai_cache_service.dart';
 import '../ai/ai_orchestrator.dart';
 import '../ai/context_manager.dart';
 import '../ai/conversation_history_service.dart';
+import '../ai/datasources/fx_rates_remote_data_source.dart';
+import '../ai/engines/currency_converter.dart';
+import '../ai/rag/rag_service.dart';
 import '../ai/prompt_manager.dart';
 import '../ai/providers/http_ai_provider.dart';
+import '../ai/providers/open_ai_provider.dart';
 import '../ai/providers/mock_ai_provider.dart';
+import '../ai/services/receipt_ocr_service.dart';
 import '../ai/token_usage_monitor.dart';
 import '../firebase/analytics_service.dart';
 import '../firebase/push_notification_service.dart';
@@ -527,25 +532,37 @@ Future<void> configureDependencies() async {
     )
     ..registerLazySingleton<MockAiProvider>(MockAiProvider.new)
     ..registerLazySingleton<HttpAiProvider>(HttpAiProvider.new)
+    ..registerLazySingleton<OpenAiProvider>(OpenAiProvider.new)
+    ..registerLazySingleton<RagService>(RagService.new)
     ..registerLazySingleton<AiOrchestrator>(
       () => AiOrchestrator(
         mockProvider: getIt<MockAiProvider>(),
         httpProvider: getIt<HttpAiProvider>(),
+        openAiProvider: getIt<OpenAiProvider>(),
         cache: getIt<AiCacheService>(),
         history: getIt<ConversationHistoryService>(),
         tokenMonitor: getIt<TokenUsageMonitor>(),
+        ragService: getIt<RagService>(),
         promptManager: getIt<PromptManager>(),
         contextManager: getIt<AiContextManager>(),
       ),
     )
+    ..registerLazySingleton(FxRatesRemoteDataSource.new)
+    ..registerLazySingleton(
+      () => CurrencyConverter(fxRates: getIt<FxRatesRemoteDataSource>()),
+    )
+    ..registerLazySingleton(ReceiptOcrService.new)
     ..registerLazySingleton<AiRepository>(
       () => AiRepositoryImpl(
         orchestrator: getIt<AiOrchestrator>(),
         transactionsRepository: getIt<TransactionsRepository>(),
+        receiptOcrService: getIt<ReceiptOcrService>(),
+        currencyConverter: getIt<CurrencyConverter>(),
         cache: getIt<CacheStorageService>(),
       ),
     )
     ..registerLazySingleton(() => ChatUseCase(getIt<AiRepository>()))
+    ..registerLazySingleton(() => ChatStreamUseCase(getIt<AiRepository>()))
     ..registerLazySingleton(
       () => ClearChatHistoryUseCase(getIt<AiRepository>()),
     )
@@ -564,6 +581,9 @@ Future<void> configureDependencies() async {
     ..registerLazySingleton(() => SmartSearchUseCase(getIt<AiRepository>()))
     ..registerLazySingleton(() => ParseReceiptUseCase(getIt<AiRepository>()))
     ..registerLazySingleton(
+      () => ParseReceiptImageUseCase(getIt<AiRepository>()),
+    )
+    ..registerLazySingleton(
       () => ParseVoiceCommandUseCase(getIt<AiRepository>()),
     )
     ..registerLazySingleton(() => GetCurrenciesUseCase(getIt<AiRepository>()))
@@ -571,7 +591,7 @@ Future<void> configureDependencies() async {
     ..registerLazySingleton(() => GetInvestmentsUseCase(getIt<AiRepository>()))
     ..registerFactory(
       () => AiAssistantBloc(
-        chatUseCase: getIt<ChatUseCase>(),
+        chatStreamUseCase: getIt<ChatStreamUseCase>(),
         clearChatHistoryUseCase: getIt<ClearChatHistoryUseCase>(),
       ),
     )

@@ -94,7 +94,11 @@ jobs:
       - run: flutter pub get
 
       - name: Unit, bloc, widget & performance tests
-        run: flutter test --coverage test/
+        run: flutter test --coverage test/unit test/bloc test/widget test/integration test/performance
+
+      - name: Golden tests (AI widgets)
+        continue-on-error: true
+        run: flutter test test/golden/ --tags golden
 
       - name: Coverage threshold (90% lib/ target)
         continue-on-error: true

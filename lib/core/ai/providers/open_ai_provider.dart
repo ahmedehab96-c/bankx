@@ -8,14 +8,13 @@ import '../models/ai_models.dart';
 import '../security/ai_dio_factory.dart';
 import 'openai_response_parser.dart';
 
-/// HTTP-based AI provider — connects to any OpenAI-compatible backend.
-/// Configure via BANKX_AI_API_URL and BANKX_AI_API_KEY environment variables.
-class HttpAiProvider implements AiProvider {
-  HttpAiProvider({Dio? dio})
+/// Direct OpenAI API provider — uses BANKX_AI_API_KEY and BANKX_AI_MODEL.
+class OpenAiProvider implements AiProvider {
+  OpenAiProvider({Dio? dio})
     : _dio =
           dio ??
           AiDioFactory.create(
-            baseUrl: AiConfig.apiUrl,
+            baseUrl: 'https://api.openai.com/v1',
             headers: {
               'Content-Type': 'application/json',
               'Authorization': 'Bearer ${AiConfig.apiKey}',
@@ -25,16 +24,16 @@ class HttpAiProvider implements AiProvider {
   final Dio _dio;
 
   @override
-  String get name => AiConfig.provider;
+  String get name => 'openai';
 
   @override
   Future<bool> isAvailable() async {
-    if (!AiConfig.useCustomHttpProvider) return false;
+    if (!AiConfig.useOpenAiProvider) return false;
     try {
-      await _dio.get<void>('/health');
+      await _dio.get<void>('/models', queryParameters: {'limit': 1});
       return true;
     } catch (_) {
-      return true;
+      return AiConfig.apiKey.isNotEmpty;
     }
   }
 
@@ -43,7 +42,7 @@ class HttpAiProvider implements AiProvider {
     required int maxTokens,
     required bool stream,
   }) => {
-    if (AiConfig.model.isNotEmpty) 'model': AiConfig.model,
+    'model': AiConfig.model,
     'messages': messages
         .map((m) => {'role': m.role.name, 'content': m.content})
         .toList(),

@@ -17,6 +17,32 @@ class ChatParams {
   final double? balance;
 }
 
+class ChatStreamParams {
+  const ChatStreamParams({
+    required this.message,
+    this.locale = 'en',
+    this.userName,
+    this.balance,
+  });
+
+  final String message;
+  final String locale;
+  final String? userName;
+  final double? balance;
+}
+
+class ChatStreamUseCase {
+  ChatStreamUseCase(this._repo);
+  final AiRepository _repo;
+
+  Stream<AiStreamChunk> call(ChatStreamParams params) => _repo.chatStream(
+    message: params.message,
+    locale: params.locale,
+    userName: params.userName,
+    balance: params.balance,
+  );
+}
+
 class ChatUseCase implements UseCase<AiResponse, ChatParams> {
   ChatUseCase(this._repo);
   final AiRepository _repo;
@@ -101,6 +127,15 @@ class ParseReceiptUseCase implements UseCase<ParsedReceipt, String> {
 
   @override
   ResultFuture<ParsedReceipt> call(String params) => _repo.parseReceipt(params);
+}
+
+class ParseReceiptImageUseCase implements UseCase<ParsedReceipt, String> {
+  ParseReceiptImageUseCase(this._repo);
+  final AiRepository _repo;
+
+  @override
+  ResultFuture<ParsedReceipt> call(String imagePath) =>
+      _repo.parseReceiptImage(imagePath);
 }
 
 class ParseVoiceCommandUseCase implements UseCase<VoiceCommand, VoiceParams> {

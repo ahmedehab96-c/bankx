@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/ai/ai_config.dart';
 import '../../../../core/ai/models/ai_models.dart';
 import '../../../../core/navigation/app_navigator.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -54,6 +55,15 @@ class _AiAssistantPageState extends State<AiAssistantPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (!AiConfig.enabled) {
+      return Scaffold(
+        appBar: AppBar(title: const Text('AI Assistant')),
+        body: const Center(
+          child: Text('AI features are disabled in this environment.'),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('AI Assistant'),
@@ -91,12 +101,31 @@ class _AiAssistantPageState extends State<AiAssistantPage> {
                 return ListView.builder(
                   controller: _scrollController,
                   padding: const EdgeInsets.all(16),
-                  itemCount: state.messages.length + (state.isLoading ? 1 : 0),
+                  itemCount:
+                      state.messages.length +
+                      (state.isStreaming && state.streamingContent.isNotEmpty
+                          ? 1
+                          : 0) +
+                      (state.isLoading ? 1 : 0),
                   itemBuilder: (context, index) {
-                    if (index >= state.messages.length) {
-                      return const _TypingIndicator();
+                    if (index < state.messages.length) {
+                      return _MessageBubble(message: state.messages[index]);
                     }
-                    return _MessageBubble(message: state.messages[index]);
+                    final streamIndex = state.messages.length;
+                    if (state.isStreaming &&
+                        state.streamingContent.isNotEmpty &&
+                        index == streamIndex) {
+                      return _MessageBubble(
+                        message: AiMessage(
+                          id: 'streaming',
+                          role: AiMessageRole.assistant,
+                          content: state.streamingContent,
+                          timestamp: DateTime.now(),
+                        ),
+                        isStreaming: true,
+                      );
+                    }
+                    return const _TypingIndicator();
                   },
                 );
               },
@@ -194,8 +223,9 @@ class _WelcomeSuggestions extends StatelessWidget {
 }
 
 class _MessageBubble extends StatelessWidget {
-  const _MessageBubble({required this.message});
+  const _MessageBubble({required this.message, this.isStreaming = false});
   final AiMessage message;
+  final bool isStreaming;
 
   @override
   Widget build(BuildContext context) {
@@ -214,9 +244,28 @@ class _MessageBubble extends StatelessWidget {
               : Theme.of(context).colorScheme.surfaceContainerHighest,
           borderRadius: BorderRadius.circular(16),
         ),
-        child: Text(
-          message.content,
-          style: TextStyle(color: isUser ? Colors.white : null),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Flexible(
+              child: Text(
+                message.content,
+                style: TextStyle(color: isUser ? Colors.white : null),
+              ),
+            ),
+            if (isStreaming)
+              Padding(
+                padding: const EdgeInsets.only(left: 4),
+                child: SizedBox(
+                  width: 8,
+                  height: 8,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 1.5,
+                    color: isUser ? Colors.white : AppColors.primaryBlue,
+                  ),
+                ),
+              ),
+          ],
         ),
       ),
     );

@@ -9,9 +9,9 @@ import 'ai_assistant_state.dart';
 
 class AiAssistantBloc extends Bloc<AiAssistantEvent, AiAssistantState> {
   AiAssistantBloc({
-    required ChatUseCase chatUseCase,
+    required ChatStreamUseCase chatStreamUseCase,
     required ClearChatHistoryUseCase clearChatHistoryUseCase,
-  }) : _chatUseCase = chatUseCase,
+  }) : _chatStreamUseCase = chatStreamUseCase,
        _clearChatHistoryUseCase = clearChatHistoryUseCase,
        super(const AiAssistantState()) {
     on<AiMessageSent>(_onMessageSent);
@@ -19,7 +19,7 @@ class AiAssistantBloc extends Bloc<AiAssistantEvent, AiAssistantState> {
     on<AiSuggestionTapped>(_onSuggestion);
   }
 
-  final ChatUseCase _chatUseCase;
+  final ChatStreamUseCase _chatStreamUseCase;
   final ClearChatHistoryUseCase _clearChatHistoryUseCase;
   final _uuid = const Uuid();
 
@@ -38,38 +38,70 @@ class AiAssistantBloc extends Bloc<AiAssistantEvent, AiAssistantState> {
       state.copyWith(
         messages: [...state.messages, userMsg],
         isLoading: true,
+        isStreaming: true,
+        streamingContent: '',
         clearError: true,
       ),
     );
 
-    final result = await _chatUseCase(
-      ChatParams(
-        message: event.message,
-        locale: event.locale,
-        userName: event.userName,
-        balance: event.balance,
-      ),
-    );
+    try {
+      final buffer = StringBuffer();
+      await for (final chunk in _chatStreamUseCase(
+        ChatStreamParams(
+          message: event.message,
+          locale: event.locale,
+          userName: event.userName,
+          balance: event.balance,
+        ),
+      )) {
+        if (chunk.delta.isNotEmpty) {
+          buffer.write(chunk.delta);
+          emit(
+            state.copyWith(
+              streamingContent: buffer.toString(),
+              isLoading: false,
+            ),
+          );
+        }
+        if (chunk.isDone) break;
+      }
 
-    result.fold(
-      (failure) =>
-          emit(state.copyWith(isLoading: false, errorMessage: failure.message)),
-      (response) {
-        final assistantMsg = AiMessage(
-          id: _uuid.v4(),
-          role: AiMessageRole.assistant,
-          content: response.content,
-          timestamp: DateTime.now(),
-        );
+      final content = buffer.toString();
+      if (content.isEmpty) {
         emit(
           state.copyWith(
-            messages: [...state.messages, assistantMsg],
             isLoading: false,
-            suggestedRoute: response.suggestedRoute,
+            isStreaming: false,
+            errorMessage: 'No response from AI assistant.',
           ),
         );
-      },
-    );
+        return;
+      }
+
+      final assistantMsg = AiMessage(
+        id: _uuid.v4(),
+        role: AiMessageRole.assistant,
+        content: content,
+        timestamp: DateTime.now(),
+      );
+      emit(
+        state.copyWith(
+          messages: [...state.messages, assistantMsg],
+          isLoading: false,
+          isStreaming: false,
+          streamingContent: '',
+        ),
+      );
+    } catch (e) {
+      emit(
+        state.copyWith(
+          isLoading: false,
+          isStreaming: false,
+          streamingContent: '',
+          errorMessage: e.toString(),
+        ),
+      );
+    }
   }
 
   Future<void> _onCleared(
