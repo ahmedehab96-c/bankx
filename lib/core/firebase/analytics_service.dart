@@ -6,7 +6,7 @@ import 'firebase_bootstrap.dart';
 /// Wraps Firebase Analytics for banking event tracking.
 class AnalyticsService {
   AnalyticsService({FirebaseAnalytics? analytics})
-      : _analyticsOverride = analytics;
+    : _analyticsOverride = analytics;
 
   final FirebaseAnalytics? _analyticsOverride;
   FirebaseAnalytics? _analytics;
@@ -23,7 +23,10 @@ class AnalyticsService {
     await _client!.logLogin(loginMethod: method);
   }
 
-  Future<void> logTransfer({required double amount, required String currency}) async {
+  Future<void> logTransfer({
+    required double amount,
+    required String currency,
+  }) async {
     if (!_enabled) return;
     await _client!.logEvent(
       name: 'transfer',
@@ -31,7 +34,10 @@ class AnalyticsService {
     );
   }
 
-  Future<void> logPayment({required String type, required double amount}) async {
+  Future<void> logPayment({
+    required String type,
+    required double amount,
+  }) async {
     if (!_enabled) return;
     await _client!.logEvent(
       name: 'payment',
@@ -39,7 +45,10 @@ class AnalyticsService {
     );
   }
 
-  Future<void> logCardAction({required String action, required String cardId}) async {
+  Future<void> logCardAction({
+    required String action,
+    required String cardId,
+  }) async {
     if (!_enabled) return;
     await _client!.logEvent(
       name: 'card_action',

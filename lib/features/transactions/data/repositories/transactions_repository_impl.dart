@@ -11,9 +11,9 @@ class TransactionsRepositoryImpl implements TransactionsRepository {
     required TransactionsLocalDataSource local,
     required TransactionsRemoteDataSource remote,
     required NetworkInfo networkInfo,
-  })  : _local = local,
-        _remote = remote,
-        _networkInfo = networkInfo;
+  }) : _local = local,
+       _remote = remote,
+       _networkInfo = networkInfo;
 
   final TransactionsLocalDataSource _local;
   final TransactionsRemoteDataSource _remote;

@@ -26,12 +26,17 @@ class AuthState extends Equatable {
       status: status ?? this.status,
       isAuthenticated: isAuthenticated ?? this.isAuthenticated,
       errorMessage: clearMessages ? null : errorMessage ?? this.errorMessage,
-      successMessage:
-          clearMessages ? null : successMessage ?? this.successMessage,
+      successMessage: clearMessages
+          ? null
+          : successMessage ?? this.successMessage,
     );
   }
 
   @override
-  List<Object?> get props =>
-      [status, isAuthenticated, errorMessage, successMessage];
+  List<Object?> get props => [
+    status,
+    isAuthenticated,
+    errorMessage,
+    successMessage,
+  ];
 }

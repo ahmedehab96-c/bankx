@@ -12,11 +12,11 @@ class TransferBloc extends Bloc<TransferEvent, TransferState> {
     required GetTransferBeneficiariesUseCase getTransferBeneficiariesUseCase,
     required TransferMoneyUseCase transferMoneyUseCase,
     required AddBeneficiaryUseCase addBeneficiaryUseCase,
-  })  : _getAccountsUseCase = getAccountsUseCase,
-        _getTransferBeneficiariesUseCase = getTransferBeneficiariesUseCase,
-        _transferMoneyUseCase = transferMoneyUseCase,
-        _addBeneficiaryUseCase = addBeneficiaryUseCase,
-        super(const TransferState()) {
+  }) : _getAccountsUseCase = getAccountsUseCase,
+       _getTransferBeneficiariesUseCase = getTransferBeneficiariesUseCase,
+       _transferMoneyUseCase = transferMoneyUseCase,
+       _addBeneficiaryUseCase = addBeneficiaryUseCase,
+       super(const TransferState()) {
     on<TransferLoaded>(_onTransferLoaded);
     on<BeneficiariesLoaded>(_onBeneficiariesLoaded);
     on<TransferSubmitted>(_onTransferSubmitted);
@@ -32,7 +32,9 @@ class TransferBloc extends Bloc<TransferEvent, TransferState> {
     TransferLoaded event,
     Emitter<TransferState> emit,
   ) async {
-    emit(state.copyWith(loadStatus: RequestStatus.loading, clearMessages: true));
+    emit(
+      state.copyWith(loadStatus: RequestStatus.loading, clearMessages: true),
+    );
     final accountsResult = await _getAccountsUseCase(const NoParams());
     await accountsResult.fold(
       (failure) async => emit(
@@ -42,8 +44,9 @@ class TransferBloc extends Bloc<TransferEvent, TransferState> {
         ),
       ),
       (accounts) async {
-        final beneficiariesResult =
-            await _getTransferBeneficiariesUseCase(const NoParams());
+        final beneficiariesResult = await _getTransferBeneficiariesUseCase(
+          const NoParams(),
+        );
         beneficiariesResult.fold(
           (failure) => emit(
             state.copyWith(
@@ -94,7 +97,9 @@ class TransferBloc extends Bloc<TransferEvent, TransferState> {
     TransferSubmitted event,
     Emitter<TransferState> emit,
   ) async {
-    emit(state.copyWith(submitStatus: RequestStatus.loading, clearMessages: true));
+    emit(
+      state.copyWith(submitStatus: RequestStatus.loading, clearMessages: true),
+    );
     final result = await _transferMoneyUseCase(
       TransferMoneyParams(
         fromAccountId: event.fromAccountId,
@@ -144,8 +149,9 @@ class TransferBloc extends Bloc<TransferEvent, TransferState> {
         ),
       ),
       (_) async {
-        final listResult =
-            await _getTransferBeneficiariesUseCase(const NoParams());
+        final listResult = await _getTransferBeneficiariesUseCase(
+          const NoParams(),
+        );
         listResult.fold(
           (failure) => emit(
             state.copyWith(

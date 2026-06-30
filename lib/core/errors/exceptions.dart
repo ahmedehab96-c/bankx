@@ -32,17 +32,13 @@ class NotFoundException extends AppException {
 }
 
 class UnauthorizedException extends AppException {
-  const UnauthorizedException([
-    super.message = 'Unauthorized',
-    int? statusCode,
-  ]) : super(statusCode: statusCode);
+  const UnauthorizedException([super.message = 'Unauthorized', int? statusCode])
+    : super(statusCode: statusCode);
 }
 
 class ForbiddenException extends AppException {
-  const ForbiddenException([
-    super.message = 'Forbidden',
-    int? statusCode,
-  ]) : super(statusCode: statusCode);
+  const ForbiddenException([super.message = 'Forbidden', int? statusCode])
+    : super(statusCode: statusCode);
 }
 
 class ApiTimeoutException extends AppException {
@@ -50,10 +46,8 @@ class ApiTimeoutException extends AppException {
 }
 
 class ConflictException extends AppException {
-  const ConflictException([
-    super.message = 'Conflict',
-    int? statusCode,
-  ]) : super(statusCode: statusCode);
+  const ConflictException([super.message = 'Conflict', int? statusCode])
+    : super(statusCode: statusCode);
 }
 
 class ValidationException extends AppException {
@@ -86,8 +80,10 @@ Failure mapExceptionToFailure(Object error) {
     ApiTimeoutException() => TimeoutFailure(error.message, error.code),
     ConflictException() => ConflictFailure(error.message, error.code),
     ValidationException() => ValidationFailure(error.message, error.code),
-    TooManyRequestsException() =>
-      TooManyRequestsFailure(error.message, error.code),
+    TooManyRequestsException() => TooManyRequestsFailure(
+      error.message,
+      error.code,
+    ),
     NetworkException() => NetworkFailure(error.message, error.code),
     NetworkSocketException() => SocketFailure(error.message, error.code),
     CacheException() => CacheFailure(error.message, error.code),

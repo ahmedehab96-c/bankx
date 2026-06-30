@@ -150,10 +150,7 @@ class _OnboardingPage extends StatelessWidget {
         Text(
           title,
           textAlign: TextAlign.center,
-          style: GoogleFonts.inter(
-            fontSize: 28,
-            fontWeight: FontWeight.w700,
-          ),
+          style: GoogleFonts.inter(fontSize: 28, fontWeight: FontWeight.w700),
         ),
         const SizedBox(height: 16),
         Text(

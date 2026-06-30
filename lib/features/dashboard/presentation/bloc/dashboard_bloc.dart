@@ -10,9 +10,9 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   DashboardBloc({
     required GetDashboardDataUseCase getDashboardDataUseCase,
     required GetAnalyticsDataUseCase getAnalyticsDataUseCase,
-  })  : _getDashboardDataUseCase = getDashboardDataUseCase,
-        _getAnalyticsDataUseCase = getAnalyticsDataUseCase,
-        super(const DashboardState()) {
+  }) : _getDashboardDataUseCase = getDashboardDataUseCase,
+       _getAnalyticsDataUseCase = getAnalyticsDataUseCase,
+       super(const DashboardState()) {
     on<DashboardLoaded>(_onDashboardLoaded);
     on<DashboardAnalyticsLoaded>(_onAnalyticsLoaded);
   }
@@ -34,10 +34,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         ),
       ),
       (data) => emit(
-        state.copyWith(
-          status: RequestStatus.success,
-          dashboardData: data,
-        ),
+        state.copyWith(status: RequestStatus.success, dashboardData: data),
       ),
     );
   }
@@ -46,7 +43,9 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     DashboardAnalyticsLoaded event,
     Emitter<DashboardState> emit,
   ) async {
-    emit(state.copyWith(analyticsStatus: RequestStatus.loading, clearError: true));
+    emit(
+      state.copyWith(analyticsStatus: RequestStatus.loading, clearError: true),
+    );
     final result = await _getAnalyticsDataUseCase(const NoParams());
     result.fold(
       (failure) => emit(

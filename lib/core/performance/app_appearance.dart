@@ -14,12 +14,12 @@ class AppAppearance extends Equatable {
   });
 
   factory AppAppearance.from(SettingsState state) => AppAppearance(
-        themeMode: state.themeMode,
-        locale: state.locale,
-        textScale: state.textScale,
-        highContrast: state.highContrast,
-        screenReaderEnabled: state.screenReaderEnabled,
-      );
+    themeMode: state.themeMode,
+    locale: state.locale,
+    textScale: state.textScale,
+    highContrast: state.highContrast,
+    screenReaderEnabled: state.screenReaderEnabled,
+  );
 
   final ThemeMode themeMode;
   final Locale locale;
@@ -28,6 +28,11 @@ class AppAppearance extends Equatable {
   final bool screenReaderEnabled;
 
   @override
-  List<Object?> get props =>
-      [themeMode, locale, textScale, highContrast, screenReaderEnabled];
+  List<Object?> get props => [
+    themeMode,
+    locale,
+    textScale,
+    highContrast,
+    screenReaderEnabled,
+  ];
 }

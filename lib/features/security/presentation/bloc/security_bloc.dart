@@ -10,9 +10,9 @@ class SecurityBloc extends Bloc<SecurityEvent, SecurityState> {
   SecurityBloc({
     required LoadSecuritySettingsUseCase loadSecuritySettingsUseCase,
     required ToggleBiometricUseCase toggleBiometricUseCase,
-  })  : _loadSecuritySettingsUseCase = loadSecuritySettingsUseCase,
-        _toggleBiometricUseCase = toggleBiometricUseCase,
-        super(const SecurityState()) {
+  }) : _loadSecuritySettingsUseCase = loadSecuritySettingsUseCase,
+       _toggleBiometricUseCase = toggleBiometricUseCase,
+       super(const SecurityState()) {
     on<SecuritySettingsLoaded>(_onLoaded);
     on<BiometricToggled>(_onBiometricToggled);
     on<TwoFactorToggled>(_onTwoFactorToggled);
@@ -35,10 +35,7 @@ class SecurityBloc extends Bloc<SecurityEvent, SecurityState> {
         ),
       ),
       (settings) => emit(
-        state.copyWith(
-          status: RequestStatus.success,
-          settings: settings,
-        ),
+        state.copyWith(status: RequestStatus.success, settings: settings),
       ),
     );
   }

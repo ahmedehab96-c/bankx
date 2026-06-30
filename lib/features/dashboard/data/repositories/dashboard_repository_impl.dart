@@ -11,9 +11,9 @@ class DashboardRepositoryImpl implements DashboardRepository {
     required DashboardLocalDataSource local,
     required DashboardRemoteDataSource remote,
     required NetworkInfo networkInfo,
-  })  : _local = local,
-        _remote = remote,
-        _networkInfo = networkInfo;
+  }) : _local = local,
+       _remote = remote,
+       _networkInfo = networkInfo;
 
   final DashboardLocalDataSource _local;
   final DashboardRemoteDataSource _remote;
@@ -21,17 +21,17 @@ class DashboardRepositoryImpl implements DashboardRepository {
 
   @override
   ResultFuture<DashboardData> getDashboardData() => NetworkBoundResource(
-        networkInfo: _networkInfo,
-        fetchRemote: _remote.fetchDashboardData,
-        fetchLocal: _local.getCachedDashboardData,
-        saveLocal: (_) async {},
-      ).execute();
+    networkInfo: _networkInfo,
+    fetchRemote: _remote.fetchDashboardData,
+    fetchLocal: _local.getCachedDashboardData,
+    saveLocal: (_) async {},
+  ).execute();
 
   @override
   ResultFuture<AnalyticsData> getAnalyticsData() => NetworkBoundResource(
-        networkInfo: _networkInfo,
-        fetchRemote: _remote.fetchAnalyticsData,
-        fetchLocal: _local.getCachedAnalyticsData,
-        saveLocal: (_) async {},
-      ).execute();
+    networkInfo: _networkInfo,
+    fetchRemote: _remote.fetchAnalyticsData,
+    fetchLocal: _local.getCachedAnalyticsData,
+    saveLocal: (_) async {},
+  ).execute();
 }

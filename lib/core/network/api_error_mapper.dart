@@ -54,6 +54,6 @@ class ApiErrorMapper {
   }
 
   Failure mapToFailure(Object error) => mapExceptionToFailure(
-        error is DioException ? mapDioException(error) : error,
-      );
+    error is DioException ? mapDioException(error) : error,
+  );
 }

@@ -45,7 +45,11 @@ class FakeCacheStorage extends Fake implements CacheStorageService {
   final List<Map<String, dynamic>> queue = [];
 
   @override
-  Future<void> write(String key, Map<String, dynamic> json, {Duration? ttl}) async {
+  Future<void> write(
+    String key,
+    Map<String, dynamic> json, {
+    Duration? ttl,
+  }) async {
     cache[key] = json;
   }
 
@@ -62,37 +66,84 @@ class FakeCacheStorage extends Fake implements CacheStorageService {
 }
 
 class MockAuthRepository extends Mock implements AuthRepository {}
+
 class MockDashboardRepository extends Mock implements DashboardRepository {}
+
 class MockAccountsRepository extends Mock implements AccountsRepository {}
-class MockTransactionsRepository extends Mock implements TransactionsRepository {}
+
+class MockTransactionsRepository extends Mock
+    implements TransactionsRepository {}
+
 class MockTransferRepository extends Mock implements TransferRepository {}
+
 class MockCardsRepository extends Mock implements CardsRepository {}
+
 class MockPaymentsRepository extends Mock implements PaymentsRepository {}
-class MockNotificationsRepository extends Mock implements NotificationsRepository {}
+
+class MockNotificationsRepository extends Mock
+    implements NotificationsRepository {}
+
 class MockProfileRepository extends Mock implements ProfileRepository {}
+
 class MockSettingsRepository extends Mock implements SettingsRepository {}
+
 class MockSecurityRepository extends Mock implements SecurityRepository {}
 
 class MockAuthRemoteDataSource extends Mock implements AuthRemoteDataSource {}
+
 class MockAuthLocalDataSource extends Mock implements AuthLocalDataSource {}
-class MockDashboardRemoteDataSource extends Mock implements DashboardRemoteDataSource {}
-class MockDashboardLocalDataSource extends Mock implements DashboardLocalDataSource {}
-class MockAccountsRemoteDataSource extends Mock implements AccountsRemoteDataSource {}
-class MockAccountsLocalDataSource extends Mock implements AccountsLocalDataSource {}
-class MockTransactionsRemoteDataSource extends Mock implements TransactionsRemoteDataSource {}
-class MockTransactionsLocalDataSource extends Mock implements TransactionsLocalDataSource {}
-class MockTransferRemoteDataSource extends Mock implements TransferRemoteDataSource {}
-class MockTransferLocalDataSource extends Mock implements TransferLocalDataSource {}
+
+class MockDashboardRemoteDataSource extends Mock
+    implements DashboardRemoteDataSource {}
+
+class MockDashboardLocalDataSource extends Mock
+    implements DashboardLocalDataSource {}
+
+class MockAccountsRemoteDataSource extends Mock
+    implements AccountsRemoteDataSource {}
+
+class MockAccountsLocalDataSource extends Mock
+    implements AccountsLocalDataSource {}
+
+class MockTransactionsRemoteDataSource extends Mock
+    implements TransactionsRemoteDataSource {}
+
+class MockTransactionsLocalDataSource extends Mock
+    implements TransactionsLocalDataSource {}
+
+class MockTransferRemoteDataSource extends Mock
+    implements TransferRemoteDataSource {}
+
+class MockTransferLocalDataSource extends Mock
+    implements TransferLocalDataSource {}
+
 class MockCardsRemoteDataSource extends Mock implements CardsRemoteDataSource {}
+
 class MockCardsLocalDataSource extends Mock implements CardsLocalDataSource {}
-class MockPaymentsRemoteDataSource extends Mock implements PaymentsRemoteDataSource {}
-class MockPaymentsLocalDataSource extends Mock implements PaymentsLocalDataSource {}
-class MockNotificationsRemoteDataSource extends Mock implements NotificationsRemoteDataSource {}
-class MockNotificationsLocalDataSource extends Mock implements NotificationsLocalDataSource {}
-class MockProfileRemoteDataSource extends Mock implements ProfileRemoteDataSource {}
-class MockProfileLocalDataSource extends Mock implements ProfileLocalDataSource {}
-class MockSettingsRemoteDataSource extends Mock implements SettingsRemoteDataSource {}
-class MockSettingsLocalDataSource extends Mock implements SettingsLocalDataSource {}
+
+class MockPaymentsRemoteDataSource extends Mock
+    implements PaymentsRemoteDataSource {}
+
+class MockPaymentsLocalDataSource extends Mock
+    implements PaymentsLocalDataSource {}
+
+class MockNotificationsRemoteDataSource extends Mock
+    implements NotificationsRemoteDataSource {}
+
+class MockNotificationsLocalDataSource extends Mock
+    implements NotificationsLocalDataSource {}
+
+class MockProfileRemoteDataSource extends Mock
+    implements ProfileRemoteDataSource {}
+
+class MockProfileLocalDataSource extends Mock
+    implements ProfileLocalDataSource {}
+
+class MockSettingsRemoteDataSource extends Mock
+    implements SettingsRemoteDataSource {}
+
+class MockSettingsLocalDataSource extends Mock
+    implements SettingsLocalDataSource {}
 
 class MemorySecureStorage extends FlutterSecureStorage {
   MemorySecureStorage(this._store) : super();
@@ -121,8 +172,7 @@ class MemorySecureStorage extends FlutterSecureStorage {
     WebOptions? webOptions,
     MacOsOptions? mOptions,
     WindowsOptions? wOptions,
-  }) async =>
-      _store[key];
+  }) async => _store[key];
 
   @override
   Future<void> write({

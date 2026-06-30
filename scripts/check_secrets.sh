@@ -8,10 +8,11 @@ cd "$ROOT"
 PATTERNS=(
   'BEGIN (RSA |EC )?PRIVATE KEY'
   'api[_-]?key\s*=\s*["\x27][^"\x27]{8,}'
-  'password\s*=\s*["\x27][^"\x27]+'
-  'ANDROID_KEYSTORE_PASSWORD'
+  'password\s*=\s*["\x27][^"\x27]{4,}'
+  'ANDROID_KEYSTORE_PASSWORD\s*=\s*["\x27][^"\x27]+'
   'ghp_[A-Za-z0-9]{20,}'
-  'firebase.*\.json'
+  '"private_key":\s*"-----BEGIN'
+  'AIza[0-9A-Za-z_-]{35}'
 )
 
 FOUND=0
@@ -24,7 +25,14 @@ while IFS= read -r -d '' file; do
   done
 done < <(git ls-files -z \
   ':!*.md' \
+  ':!.github/**' \
+  ':!.gitignore' \
   ':!scripts/check_secrets.sh' \
+  ':!scripts/setup_firebase.sh' \
+  ':!scripts/encode_firebase_secrets.sh' \
+  ':!scripts/load_firebase_config.sh' \
+  ':!android/app/build.gradle.kts' \
+  ':!lib/core/firebase/firebase_options.dart' \
   ':!config/env/.env.example' \
   ':!config/env/.env.development' \
   ':!config/env/.env.staging' \

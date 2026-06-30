@@ -29,8 +29,8 @@ class CachingNetworkInfo implements NetworkInfo {
     this._delegate, {
     ConnectivityService? connectivity,
     Duration cacheTtl = const Duration(seconds: 3),
-  })  : _connectivity = connectivity ?? ConnectivityService(),
-        _cacheTtl = cacheTtl {
+  }) : _connectivity = connectivity ?? ConnectivityService(),
+       _cacheTtl = cacheTtl {
     _subscription = _connectivity.onConnectivityChanged.listen((_) {
       _cachedConnected = null;
       _cacheExpiresAt = null;

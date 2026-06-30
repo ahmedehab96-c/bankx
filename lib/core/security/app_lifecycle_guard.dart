@@ -29,7 +29,8 @@ class _AppLifecycleGuardState extends State<AppLifecycleGuard>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     setState(() {
-      _obscured = state == AppLifecycleState.inactive ||
+      _obscured =
+          state == AppLifecycleState.inactive ||
           state == AppLifecycleState.paused ||
           state == AppLifecycleState.hidden;
     });
@@ -47,7 +48,11 @@ class _AppLifecycleGuardState extends State<AppLifecycleGuard>
             child: ColoredBox(
               color: Color(0xFF0A1628),
               child: Center(
-                child: Icon(Icons.lock_rounded, color: Colors.white54, size: 48),
+                child: Icon(
+                  Icons.lock_rounded,
+                  color: Colors.white54,
+                  size: 48,
+                ),
               ),
             ),
           ),

@@ -45,12 +45,12 @@ class SettingsState extends Equatable {
 
   @override
   List<Object?> get props => [
-        status,
-        themeMode,
-        locale,
-        textScale,
-        highContrast,
-        screenReaderEnabled,
-        errorMessage,
-      ];
+    status,
+    themeMode,
+    locale,
+    textScale,
+    highContrast,
+    screenReaderEnabled,
+    errorMessage,
+  ];
 }

@@ -72,8 +72,8 @@ class SettingsScreen extends StatelessWidget {
                   : null,
               onTap: () {
                 context.read<SettingsBloc>().add(
-                      const LocaleChanged(Locale('en')),
-                    );
+                  const LocaleChanged(Locale('en')),
+                );
                 context.pop();
               },
             ),
@@ -84,8 +84,8 @@ class SettingsScreen extends StatelessWidget {
                   : null,
               onTap: () {
                 context.read<SettingsBloc>().add(
-                      const LocaleChanged(Locale('ar')),
-                    );
+                  const LocaleChanged(Locale('ar')),
+                );
                 context.pop();
               },
             ),
@@ -107,8 +107,8 @@ class SettingsScreen extends StatelessWidget {
               title: Text(l10n.lightMode),
               onTap: () {
                 context.read<SettingsBloc>().add(
-                      const ThemeChanged(ThemeMode.light),
-                    );
+                  const ThemeChanged(ThemeMode.light),
+                );
                 context.pop();
               },
             ),
@@ -116,8 +116,8 @@ class SettingsScreen extends StatelessWidget {
               title: Text(l10n.darkMode),
               onTap: () {
                 context.read<SettingsBloc>().add(
-                      const ThemeChanged(ThemeMode.dark),
-                    );
+                  const ThemeChanged(ThemeMode.dark),
+                );
                 context.pop();
               },
             ),
@@ -125,8 +125,8 @@ class SettingsScreen extends StatelessWidget {
               title: Text(l10n.systemDefault),
               onTap: () {
                 context.read<SettingsBloc>().add(
-                      const ThemeChanged(ThemeMode.system),
-                    );
+                  const ThemeChanged(ThemeMode.system),
+                );
                 context.pop();
               },
             ),

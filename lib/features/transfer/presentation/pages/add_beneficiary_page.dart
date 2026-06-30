@@ -34,12 +34,12 @@ class _AddBeneficiaryScreenState extends State<AddBeneficiaryScreen> {
 
   void _save() {
     context.read<TransferBloc>().add(
-          AddBeneficiarySubmitted(
-            name: _nameController.text,
-            bankName: _bankController.text,
-            accountNumber: _accountController.text,
-          ),
-        );
+      AddBeneficiarySubmitted(
+        name: _nameController.text,
+        bankName: _bankController.text,
+        accountNumber: _accountController.text,
+      ),
+    );
   }
 
   @override
@@ -53,7 +53,9 @@ class _AddBeneficiaryScreenState extends State<AddBeneficiaryScreen> {
       listener: (context, state) {
         if (state.addBeneficiaryStatus == RequestStatus.success) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(AppLocalizations.of(context).saveBeneficiary)),
+            SnackBar(
+              content: Text(AppLocalizations.of(context).saveBeneficiary),
+            ),
           );
           context.pop();
         }
@@ -85,7 +87,8 @@ class _AddBeneficiaryScreenState extends State<AddBeneficiaryScreen> {
                 const SizedBox(height: 32),
                 AppButton(
                   label: l10n.saveBeneficiary,
-                  isLoading: state.addBeneficiaryStatus == RequestStatus.loading,
+                  isLoading:
+                      state.addBeneficiaryStatus == RequestStatus.loading,
                   onPressed: _save,
                 ),
               ],

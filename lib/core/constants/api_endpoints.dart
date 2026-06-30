@@ -40,8 +40,7 @@ abstract final class ApiEndpoints {
 
   // Notifications
   static const notifications = '/notifications';
-  static String markNotificationRead(int index) =>
-      '/notifications/$index/read';
+  static String markNotificationRead(int index) => '/notifications/$index/read';
 
   // Profile
   static const profile = '/profile';

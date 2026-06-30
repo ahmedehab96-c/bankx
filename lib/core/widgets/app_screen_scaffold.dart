@@ -49,10 +49,7 @@ class AppScreenScaffold extends StatelessWidget {
       ),
       floatingActionButton: floatingActionButton,
       body: _scroll
-          ? SingleChildScrollView(
-              padding: EdgeInsets.all(padding),
-              child: body,
-            )
+          ? SingleChildScrollView(padding: EdgeInsets.all(padding), child: body)
           : Padding(padding: EdgeInsets.all(padding), child: body),
     );
   }
@@ -60,11 +57,7 @@ class AppScreenScaffold extends StatelessWidget {
 
 /// Auth flow header with title and subtitle.
 class AuthHeader extends StatelessWidget {
-  const AuthHeader({
-    super.key,
-    required this.title,
-    required this.subtitle,
-  });
+  const AuthHeader({super.key, required this.title, required this.subtitle});
 
   final String title;
   final String subtitle;
@@ -76,10 +69,7 @@ class AuthHeader extends StatelessWidget {
       children: [
         Text(
           title,
-          style: GoogleFonts.inter(
-            fontSize: 28,
-            fontWeight: FontWeight.w700,
-          ),
+          style: GoogleFonts.inter(fontSize: 28, fontWeight: FontWeight.w700),
         ),
         const SizedBox(height: 8),
         Text(
@@ -124,9 +114,9 @@ Future<void> runMockAction(
   clearLoading();
   if (!context.mounted) return;
   if (successMessage != null) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(successMessage)),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(successMessage)));
   }
   onSuccess?.call();
 }

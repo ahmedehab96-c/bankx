@@ -74,5 +74,4 @@ Future<void> pumpRoutedWidget(
 Widget withBloc<B extends BlocBase<S>, S>({
   required B bloc,
   required Widget child,
-}) =>
-    BlocProvider<B>.value(value: bloc, child: child);
+}) => BlocProvider<B>.value(value: bloc, child: child);

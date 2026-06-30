@@ -13,7 +13,9 @@ class TransactionsLocalDataSourceImpl implements TransactionsLocalDataSource {
   Future<List<Transaction>?> getCachedTransactions() async {
     final items = await _cache.readList(CacheKeys.transactions);
     if (items == null) return null;
-    return items.map((e) => BankingMappers.toTransaction(TransactionDto.fromJson(e))).toList();
+    return items
+        .map((e) => BankingMappers.toTransaction(TransactionDto.fromJson(e)))
+        .toList();
   }
 
   @override

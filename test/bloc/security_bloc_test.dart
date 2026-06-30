@@ -18,7 +18,9 @@ void main() {
       'emits success when settings load',
       build: () {
         repository = _MockSecurityRepository();
-        when(() => repository.isBiometricEnabled()).thenAnswer((_) async => true);
+        when(
+          () => repository.isBiometricEnabled(),
+        ).thenAnswer((_) async => true);
         when(() => repository.canUseBiometrics()).thenAnswer((_) async => true);
         when(() => repository.isDeviceSecure()).thenAnswer((_) async => true);
         when(() => repository.isRooted()).thenAnswer((_) async => false);
@@ -29,7 +31,11 @@ void main() {
       },
       act: (bloc) => bloc.add(const SecuritySettingsLoaded()),
       expect: () => [
-        isA<SecurityState>().having((s) => s.status, 'status', RequestStatus.loading),
+        isA<SecurityState>().having(
+          (s) => s.status,
+          'status',
+          RequestStatus.loading,
+        ),
         isA<SecurityState>()
             .having((s) => s.status, 'status', RequestStatus.success)
             .having((s) => s.settings?.biometricEnabled, 'biometric', true),

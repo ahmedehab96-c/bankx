@@ -29,7 +29,8 @@ class CacheStorageService {
       if (raw == null) continue;
       try {
         final decoded = jsonDecode(raw);
-        if (decoded is Map<String, dynamic> && decoded.containsKey(_metaExpiresAt)) {
+        if (decoded is Map<String, dynamic> &&
+            decoded.containsKey(_metaExpiresAt)) {
           final expiresRaw = decoded[_metaExpiresAt] as String?;
           final expiresAt = DateTime.tryParse(expiresRaw ?? '');
           if (expiresAt != null && DateTime.now().isAfter(expiresAt)) {

@@ -11,9 +11,9 @@ class ProfileRepositoryImpl implements ProfileRepository {
     required ProfileLocalDataSource local,
     required ProfileRemoteDataSource remote,
     required NetworkInfo networkInfo,
-  })  : _local = local,
-        _remote = remote,
-        _networkInfo = networkInfo;
+  }) : _local = local,
+       _remote = remote,
+       _networkInfo = networkInfo;
 
   final ProfileLocalDataSource _local;
   final ProfileRemoteDataSource _remote;
@@ -21,9 +21,9 @@ class ProfileRepositoryImpl implements ProfileRepository {
 
   @override
   ResultFuture<ProfileData> getProfileData() => NetworkBoundResource(
-        networkInfo: _networkInfo,
-        fetchRemote: _remote.fetchProfileData,
-        fetchLocal: _local.getCachedProfileData,
-        saveLocal: (_) async {},
-      ).execute();
+    networkInfo: _networkInfo,
+    fetchRemote: _remote.fetchProfileData,
+    fetchLocal: _local.getCachedProfileData,
+    saveLocal: (_) async {},
+  ).execute();
 }

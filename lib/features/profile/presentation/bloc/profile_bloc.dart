@@ -8,8 +8,8 @@ import 'profile_state.dart';
 
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   ProfileBloc({required GetProfileDataUseCase getProfileDataUseCase})
-      : _getProfileDataUseCase = getProfileDataUseCase,
-        super(const ProfileState()) {
+    : _getProfileDataUseCase = getProfileDataUseCase,
+      super(const ProfileState()) {
     on<ProfileLoaded>(_onProfileLoaded);
   }
 
@@ -29,10 +29,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         ),
       ),
       (data) => emit(
-        state.copyWith(
-          status: RequestStatus.success,
-          profileData: data,
-        ),
+        state.copyWith(status: RequestStatus.success, profileData: data),
       ),
     );
   }

@@ -17,6 +17,5 @@ extension EitherBlocX<T> on Either<Failure, T> {
   R foldResult<R>({
     required R Function(Failure failure) onFailure,
     required R Function(T data) onSuccess,
-  }) =>
-      fold(onFailure, onSuccess);
+  }) => fold(onFailure, onSuccess);
 }

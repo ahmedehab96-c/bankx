@@ -90,8 +90,7 @@ class _BankXAppState extends State<BankXApp> {
               title: 'BankX',
               debugShowCheckedModeBanner: false,
               theme: AppTheme.light(highContrast: appearance.highContrast),
-              darkTheme:
-                  AppTheme.dark(highContrast: appearance.highContrast),
+              darkTheme: AppTheme.dark(highContrast: appearance.highContrast),
               themeMode: appearance.themeMode,
               locale: appearance.locale,
               supportedLocales: AppLocalizations.supportedLocales,

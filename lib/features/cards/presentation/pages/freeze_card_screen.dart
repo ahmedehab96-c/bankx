@@ -110,9 +110,9 @@ class _FreezeCardScreenState extends State<FreezeCardScreen> {
                   isLoading: state.freezeStatus == RequestStatus.loading,
                   onPressed: () {
                     _wasFrozen = isFrozen;
-                    context
-                        .read<CardsBloc>()
-                        .add(CardFreezeToggled(widget.cardId));
+                    context.read<CardsBloc>().add(
+                      CardFreezeToggled(widget.cardId),
+                    );
                   },
                 ),
                 const SizedBox(height: 24),

@@ -46,15 +46,13 @@ class _SplashScreenState extends State<SplashScreen>
       curve: Curves.easeOut,
     );
 
-    _footerSlide = Tween<Offset>(
-      begin: const Offset(0, 0.4),
-      end: Offset.zero,
-    ).animate(
-      CurvedAnimation(
-        parent: _footerController,
-        curve: Curves.easeOutCubic,
-      ),
-    );
+    _footerSlide = Tween<Offset>(begin: const Offset(0, 0.4), end: Offset.zero)
+        .animate(
+          CurvedAnimation(
+            parent: _footerController,
+            curve: Curves.easeOutCubic,
+          ),
+        );
 
     Future<void>.delayed(const Duration(milliseconds: 900), () {
       if (mounted) _footerController.forward();

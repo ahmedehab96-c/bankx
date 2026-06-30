@@ -8,7 +8,8 @@ const Right<Failure, void> testRightVoid = Right<Failure, void>(null);
 
 Left<Failure, T> testLeft<T>(Failure failure) => Left<Failure, T>(failure);
 
-Left<Failure, void> testLeftVoid(Failure failure) => Left<Failure, void>(failure);
+Left<Failure, void> testLeftVoid(Failure failure) =>
+    Left<Failure, void>(failure);
 
 Future<Either<Failure, T>> futureRight<T>(T value) async =>
     Right<Failure, T>(value);

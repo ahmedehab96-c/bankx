@@ -49,10 +49,7 @@ void main() {
   group('SmartSearchEngine', () {
     test('filters transactions above amount', () {
       const engine = SmartSearchEngine();
-      final txs = [
-        _expense('1', 100),
-        _expense('2', 600),
-      ];
+      final txs = [_expense('1', 100), _expense('2', 600)];
       final result = engine.search('payments above 500', txs);
       expect(result.transactionIds, ['2']);
       expect(result.interpretation, contains('500'));
@@ -76,16 +73,16 @@ void main() {
 }
 
 Transaction _expense(String id, double amount) => Transaction(
-      id: id,
-      title: 'Test',
-      subtitle: 'Test',
-      amount: amount,
-      currency: 'AED',
-      type: TransactionType.expense,
-      status: TransactionStatus.completed,
-      date: DateTime.now(),
-      category: 'other',
-      icon: 'icon',
-      reference: 'ref',
-      accountId: 'a1',
-    );
+  id: id,
+  title: 'Test',
+  subtitle: 'Test',
+  amount: amount,
+  currency: 'AED',
+  type: TransactionType.expense,
+  status: TransactionStatus.completed,
+  date: DateTime.now(),
+  category: 'other',
+  icon: 'icon',
+  reference: 'ref',
+  accountId: 'a1',
+);

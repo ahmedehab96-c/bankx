@@ -19,7 +19,8 @@ class SecuritySettings {
   final bool isRooted;
 }
 
-class LoadSecuritySettingsUseCase implements UseCase<SecuritySettings, NoParams> {
+class LoadSecuritySettingsUseCase
+    implements UseCase<SecuritySettings, NoParams> {
   LoadSecuritySettingsUseCase(this._repository);
 
   final SecurityRepository _repository;

@@ -21,10 +21,7 @@ class SectionHeader extends StatelessWidget {
       children: [
         Text(
           title,
-          style: GoogleFonts.inter(
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
-          ),
+          style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.w700),
         ),
         if (actionLabel != null && onAction != null)
           TextButton(

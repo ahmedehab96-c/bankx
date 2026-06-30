@@ -8,19 +8,17 @@ class TokenExpirationManager {
   final SecureStorageService _secureStorage;
 
   Future<void> saveExpiration(DateTime expiresAt) => _secureStorage.write(
-        SecurityStorageKeys.tokenExpiresAtMs,
-        expiresAt.millisecondsSinceEpoch.toString(),
-      );
+    SecurityStorageKeys.tokenExpiresAtMs,
+    expiresAt.millisecondsSinceEpoch.toString(),
+  );
 
   Future<void> saveExpirationFromTtl(Duration ttl) =>
       saveExpiration(DateTime.now().add(ttl));
 
   Future<bool> isExpired({Duration grace = const Duration(minutes: 1)}) async {
-    final raw =
-        await _secureStorage.read(SecurityStorageKeys.tokenExpiresAtMs);
+    final raw = await _secureStorage.read(SecurityStorageKeys.tokenExpiresAtMs);
     if (raw == null) return false;
-    final expiresAt =
-        DateTime.fromMillisecondsSinceEpoch(int.parse(raw));
+    final expiresAt = DateTime.fromMillisecondsSinceEpoch(int.parse(raw));
     return DateTime.now().isAfter(expiresAt.subtract(grace));
   }
 

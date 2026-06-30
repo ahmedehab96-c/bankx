@@ -56,10 +56,12 @@ void main() {
       final accounts = MockGetAccountsUseCase();
       final beneficiaries = MockGetTransferBeneficiariesUseCase();
       final transfer = MockTransferMoneyUseCase();
-      when(() => accounts(any()))
-          .thenAnswer((_) async => const Right([TestFixtures.account]));
-      when(() => beneficiaries(any()))
-          .thenAnswer((_) async => const Right([TestFixtures.beneficiary]));
+      when(
+        () => accounts(any()),
+      ).thenAnswer((_) async => const Right([TestFixtures.account]));
+      when(
+        () => beneficiaries(any()),
+      ).thenAnswer((_) async => const Right([TestFixtures.beneficiary]));
       when(() => transfer(any())).thenAnswer((_) async => const Right(null));
 
       final bloc = TransferBloc(
@@ -99,7 +101,9 @@ void main() {
       );
       addTearDown(bloc.close);
 
-      bloc.add(const BillPaymentSubmitted(amount: 150, billType: 'electricity'));
+      bloc.add(
+        const BillPaymentSubmitted(amount: 150, billType: 'electricity'),
+      );
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 50));
       expect(bloc.state.billStatus, RequestStatus.success);
@@ -109,7 +113,9 @@ void main() {
   group('QR payment flow', () {
     testWidgets('loads QR data', (tester) async {
       final qr = MockGetQrPaymentDataUseCase();
-      when(() => qr(any())).thenAnswer((_) async => Right(TestFixtures.qrPaymentData));
+      when(
+        () => qr(any()),
+      ).thenAnswer((_) async => Right(TestFixtures.qrPaymentData));
 
       final bloc = PaymentsBloc(
         getQrPaymentDataUseCase: qr,
@@ -129,7 +135,8 @@ void main() {
     testWidgets('toggles card freeze', (tester) async {
       final freeze = MockToggleCardFreezeUseCase();
       when(() => freeze(any())).thenAnswer(
-        (_) async => Right(TestFixtures.card.copyWith(status: CardStatus.frozen)),
+        (_) async =>
+            Right(TestFixtures.card.copyWith(status: CardStatus.frozen)),
       );
 
       final bloc = CardsBloc(
@@ -150,7 +157,9 @@ void main() {
     testWidgets('loads and marks notification read', (tester) async {
       final get = MockGetNotificationsUseCase();
       final mark = MockMarkNotificationReadUseCase();
-      when(() => get(any())).thenAnswer((_) async => Right([TestFixtures.notification]));
+      when(
+        () => get(any()),
+      ).thenAnswer((_) async => Right([TestFixtures.notification]));
       when(() => mark(any())).thenAnswer(
         (_) async => Right([
           AppNotification(

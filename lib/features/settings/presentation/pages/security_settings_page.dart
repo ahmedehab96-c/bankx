@@ -51,9 +51,9 @@ class _SecuritySettingsBody extends StatelessWidget {
                 trailing: Switch(
                   value: biometric,
                   onChanged: state.settings?.biometricsAvailable == true
-                      ? (v) => context
-                          .read<SecurityBloc>()
-                          .add(BiometricToggled(v))
+                      ? (v) => context.read<SecurityBloc>().add(
+                          BiometricToggled(v),
+                        )
                       : null,
                 ),
                 showDivider: true,
@@ -64,9 +64,8 @@ class _SecuritySettingsBody extends StatelessWidget {
                 iconColor: AppColors.success,
                 trailing: Switch(
                   value: state.twoFactorEnabled,
-                  onChanged: (v) => context
-                      .read<SecurityBloc>()
-                      .add(TwoFactorToggled(v)),
+                  onChanged: (v) =>
+                      context.read<SecurityBloc>().add(TwoFactorToggled(v)),
                 ),
                 showDivider: false,
               ),

@@ -13,10 +13,10 @@ class SettingsRepositoryImpl implements SettingsRepository {
     required SettingsLocalDataSource local,
     required SettingsRemoteDataSource remote,
     required NetworkInfo networkInfo,
-  })  : _local = local,
-        _remote = remote,
-        _networkInfo = networkInfo,
-        _remoteResource = RemoteResource(networkInfo: networkInfo);
+  }) : _local = local,
+       _remote = remote,
+       _networkInfo = networkInfo,
+       _remoteResource = RemoteResource(networkInfo: networkInfo);
 
   final SettingsLocalDataSource _local;
   final SettingsRemoteDataSource _remote;
@@ -25,25 +25,25 @@ class SettingsRepositoryImpl implements SettingsRepository {
 
   @override
   ResultFuture<SettingsBundle> getSettings() => NetworkBoundResource(
-        networkInfo: _networkInfo,
-        fetchRemote: () async {
-          final dto = await _remote.fetchSettings();
-          final bundle = SettingsBundle(
-            themeMode: _parseTheme(dto.themeMode),
-            locale: Locale(dto.locale),
-          );
-          await _local.saveThemeMode(bundle.themeMode);
-          await _local.saveLocale(bundle.locale);
-          return bundle;
-        },
-        fetchLocal: () async {
-          final theme = await _local.getCachedThemeMode();
-          final locale = await _local.getCachedLocale();
-          if (theme == null || locale == null) return null;
-          return SettingsBundle(themeMode: theme, locale: locale);
-        },
-        saveLocal: (_) async {},
-      ).execute();
+    networkInfo: _networkInfo,
+    fetchRemote: () async {
+      final dto = await _remote.fetchSettings();
+      final bundle = SettingsBundle(
+        themeMode: _parseTheme(dto.themeMode),
+        locale: Locale(dto.locale),
+      );
+      await _local.saveThemeMode(bundle.themeMode);
+      await _local.saveLocale(bundle.locale);
+      return bundle;
+    },
+    fetchLocal: () async {
+      final theme = await _local.getCachedThemeMode();
+      final locale = await _local.getCachedLocale();
+      if (theme == null || locale == null) return null;
+      return SettingsBundle(themeMode: theme, locale: locale);
+    },
+    saveLocal: (_) async {},
+  ).execute();
 
   @override
   ResultFuture<ThemeMode> getThemeMode() async {
@@ -78,8 +78,8 @@ class SettingsRepositoryImpl implements SettingsRepository {
       });
 
   static ThemeMode _parseTheme(String value) => switch (value) {
-        'light' => ThemeMode.light,
-        'dark' => ThemeMode.dark,
-        _ => ThemeMode.system,
-      };
+    'light' => ThemeMode.light,
+    'dark' => ThemeMode.dark,
+    _ => ThemeMode.system,
+  };
 }

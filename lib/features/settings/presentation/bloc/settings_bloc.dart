@@ -12,10 +12,10 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     required GetSettingsUseCase getSettingsUseCase,
     required SetThemeModeUseCase setThemeModeUseCase,
     required SetLocaleUseCase setLocaleUseCase,
-  })  : _getSettingsUseCase = getSettingsUseCase,
-        _setThemeModeUseCase = setThemeModeUseCase,
-        _setLocaleUseCase = setLocaleUseCase,
-        super(const SettingsState()) {
+  }) : _getSettingsUseCase = getSettingsUseCase,
+       _setThemeModeUseCase = setThemeModeUseCase,
+       _setLocaleUseCase = setLocaleUseCase,
+       super(const SettingsState()) {
     on<SettingsLoaded>(_onSettingsLoaded);
     on<ThemeChanged>(_onThemeChanged);
     on<LocaleChanged>(_onLocaleChanged);
@@ -54,7 +54,9 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     Emitter<SettingsState> emit,
   ) async {
     emit(state.copyWith(status: RequestStatus.loading, clearError: true));
-    final result = await _setThemeModeUseCase(SetThemeModeParams(event.themeMode));
+    final result = await _setThemeModeUseCase(
+      SetThemeModeParams(event.themeMode),
+    );
     result.fold(
       (failure) => emit(
         state.copyWith(
@@ -85,10 +87,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         ),
       ),
       (_) => emit(
-        state.copyWith(
-          status: RequestStatus.success,
-          locale: event.locale,
-        ),
+        state.copyWith(status: RequestStatus.success, locale: event.locale),
       ),
     );
   }

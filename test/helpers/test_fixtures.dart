@@ -81,41 +81,38 @@ abstract final class TestFixtures {
   );
 
   static DashboardData get dashboardData => DashboardData(
-        user: user,
-        totalBalance: 25000,
-        accounts: [account],
-        recentTransactions: [transaction],
-        weeklySpending: const [100, 200, 150, 300, 250, 180, 220],
-        weeklyLabels: const ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-      );
+    user: user,
+    totalBalance: 25000,
+    accounts: [account],
+    recentTransactions: [transaction],
+    weeklySpending: const [100, 200, 150, 300, 250, 180, 220],
+    weeklyLabels: const ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+  );
 
   static AnalyticsData get analyticsData => const AnalyticsData(
-        weeklySpending: [100, 200, 150, 300, 250, 180, 220],
-        weeklyLabels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-        totalIncome: 20000,
-        totalExpense: 8000,
-      );
+    weeklySpending: [100, 200, 150, 300, 250, 180, 220],
+    weeklyLabels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    totalIncome: 20000,
+    totalExpense: 8000,
+  );
 
-  static ProfileData get profileData =>
-      ProfileData(user: user, cardCount: 2);
+  static ProfileData get profileData => ProfileData(user: user, cardCount: 2);
 
   static QrPaymentData get qrPaymentData => QrPaymentData(
-        user: user,
-        accountName: account.name,
-        accountNumber: account.accountNumber,
-        iban: account.iban,
-      );
+    user: user,
+    accountName: account.name,
+    accountNumber: account.accountNumber,
+    iban: account.iban,
+  );
 
-  static SettingsBundle get settingsBundle => const SettingsBundle(
-        themeMode: ThemeMode.light,
-        locale: Locale('en'),
-      );
+  static SettingsBundle get settingsBundle =>
+      const SettingsBundle(themeMode: ThemeMode.light, locale: Locale('en'));
 
   static AuthResponseDto get authResponse => AuthResponseDto(
-        tokens: const AuthTokensDto(
-          accessToken: 'access-token',
-          refreshToken: 'refresh-token',
-        ),
-        user: UserDto(id: user.id, name: user.name, email: user.email),
-      );
+    tokens: const AuthTokensDto(
+      accessToken: 'access-token',
+      refreshToken: 'refresh-token',
+    ),
+    user: UserDto(id: user.id, name: user.name, email: user.email),
+  );
 }

@@ -12,10 +12,7 @@ class QrPaymentLoaded extends PaymentsEvent {
 }
 
 class BillPaymentSubmitted extends PaymentsEvent {
-  const BillPaymentSubmitted({
-    required this.amount,
-    required this.billType,
-  });
+  const BillPaymentSubmitted({required this.amount, required this.billType});
 
   final double amount;
   final String billType;

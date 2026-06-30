@@ -14,10 +14,10 @@ class OfflineSyncService {
     required TransferRemoteDataSource transferRemote,
     required NetworkInfo networkInfo,
     ConnectivityService? connectivity,
-  })  : _cache = cache,
-        _transferRemote = transferRemote,
-        _networkInfo = networkInfo,
-        _connectivity = connectivity ?? ConnectivityService();
+  }) : _cache = cache,
+       _transferRemote = transferRemote,
+       _networkInfo = networkInfo,
+       _connectivity = connectivity ?? ConnectivityService();
 
   final CacheStorageService _cache;
   final TransferRemoteDataSource _transferRemote;

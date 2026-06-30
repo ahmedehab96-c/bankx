@@ -56,7 +56,9 @@ class BalanceCard extends StatelessWidget {
               GestureDetector(
                 onTap: onToggleVisibility,
                 child: Icon(
-                  isVisible ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                  isVisible
+                      ? Icons.visibility_outlined
+                      : Icons.visibility_off_outlined,
                   color: Colors.white.withValues(alpha: 0.85),
                   size: 22,
                 ),

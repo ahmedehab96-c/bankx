@@ -11,10 +11,10 @@ class NotificationsRepositoryImpl implements NotificationsRepository {
     required NotificationsLocalDataSource local,
     required NotificationsRemoteDataSource remote,
     required NetworkInfo networkInfo,
-  })  : _local = local,
-        _remote = remote,
-        _networkInfo = networkInfo,
-        _remoteResource = RemoteResource(networkInfo: networkInfo);
+  }) : _local = local,
+       _remote = remote,
+       _networkInfo = networkInfo,
+       _remoteResource = RemoteResource(networkInfo: networkInfo);
 
   final NotificationsLocalDataSource _local;
   final NotificationsRemoteDataSource _remote;

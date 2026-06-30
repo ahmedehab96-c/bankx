@@ -185,9 +185,7 @@ class _BankXLogoState extends State<BankXLogo> with TickerProviderStateMixin {
                                   end: Alignment.centerRight,
                                   colors: [
                                     Colors.transparent,
-                                    AppColors.accentCyan.withValues(
-                                      alpha: 0.0,
-                                    ),
+                                    AppColors.accentCyan.withValues(alpha: 0.0),
                                     AppColors.accentCyan.withValues(
                                       alpha: 0.35,
                                     ),
@@ -195,9 +193,7 @@ class _BankXLogoState extends State<BankXLogo> with TickerProviderStateMixin {
                                     AppColors.accentCyan.withValues(
                                       alpha: 0.35,
                                     ),
-                                    AppColors.accentCyan.withValues(
-                                      alpha: 0.0,
-                                    ),
+                                    AppColors.accentCyan.withValues(alpha: 0.0),
                                     Colors.transparent,
                                   ],
                                   stops: const [
@@ -302,11 +298,7 @@ class _BankXLogoBackgroundState extends State<BankXLogoBackground>
 }
 
 class _Orb extends StatelessWidget {
-  const _Orb({
-    required this.color,
-    required this.size,
-    required this.offset,
-  });
+  const _Orb({required this.color, required this.size, required this.offset});
 
   final Color color;
   final double size;

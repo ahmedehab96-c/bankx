@@ -11,10 +11,10 @@ class PaymentsRepositoryImpl implements PaymentsRepository {
     required PaymentsLocalDataSource local,
     required PaymentsRemoteDataSource remote,
     required NetworkInfo networkInfo,
-  })  : _local = local,
-        _remote = remote,
-        _networkInfo = networkInfo,
-        _remoteResource = RemoteResource(networkInfo: networkInfo);
+  }) : _local = local,
+       _remote = remote,
+       _networkInfo = networkInfo,
+       _remoteResource = RemoteResource(networkInfo: networkInfo);
 
   final PaymentsLocalDataSource _local;
   final PaymentsRemoteDataSource _remote;
@@ -23,18 +23,17 @@ class PaymentsRepositoryImpl implements PaymentsRepository {
 
   @override
   ResultFuture<QrPaymentData> getQrPaymentData() => NetworkBoundResource(
-        networkInfo: _networkInfo,
-        fetchRemote: _remote.fetchQrPaymentData,
-        fetchLocal: _local.getCachedQrPaymentData,
-        saveLocal: (_) async {},
-      ).execute();
+    networkInfo: _networkInfo,
+    fetchRemote: _remote.fetchQrPaymentData,
+    fetchLocal: _local.getCachedQrPaymentData,
+    saveLocal: (_) async {},
+  ).execute();
 
   @override
   ResultFuture<void> submitBillPayment({
     required double amount,
     required String billType,
-  }) =>
-      _remoteResource.executeVoid(
-        () => _remote.submitBillPayment(amount: amount, billType: billType),
-      );
+  }) => _remoteResource.executeVoid(
+    () => _remote.submitBillPayment(amount: amount, billType: billType),
+  );
 }

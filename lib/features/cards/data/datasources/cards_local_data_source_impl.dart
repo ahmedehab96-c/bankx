@@ -13,7 +13,9 @@ class CardsLocalDataSourceImpl implements CardsLocalDataSource {
   Future<List<BankCard>?> getCachedCards() async {
     final items = await _cache.readList(CacheKeys.cards);
     if (items == null) return null;
-    return items.map((e) => BankingMappers.toCard(CardDto.fromJson(e))).toList();
+    return items
+        .map((e) => BankingMappers.toCard(CardDto.fromJson(e)))
+        .toList();
   }
 
   @override

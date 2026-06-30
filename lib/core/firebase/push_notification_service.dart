@@ -19,9 +19,9 @@ class PushNotificationService {
   PushNotificationService({
     FirebaseMessaging? messaging,
     FlutterLocalNotificationsPlugin? localNotifications,
-  })  : _messagingOverride = messaging,
-        _localNotifications =
-            localNotifications ?? FlutterLocalNotificationsPlugin();
+  }) : _messagingOverride = messaging,
+       _localNotifications =
+           localNotifications ?? FlutterLocalNotificationsPlugin();
 
   final FirebaseMessaging? _messagingOverride;
   FirebaseMessaging? _messaging;
@@ -61,8 +61,7 @@ class PushNotificationService {
     await messaging.requestPermission();
 
     _foregroundSub = FirebaseMessaging.onMessage.listen(_onForegroundMessage);
-    _openedAppSub =
-        FirebaseMessaging.onMessageOpenedApp.listen(_onOpenedApp);
+    _openedAppSub = FirebaseMessaging.onMessageOpenedApp.listen(_onOpenedApp);
 
     final initial = await messaging.getInitialMessage();
     if (initial != null) _onOpenedApp(initial);

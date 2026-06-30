@@ -19,12 +19,12 @@ void main() {
   late MockResetPasswordUseCase resetPasswordUseCase;
 
   AuthBloc buildBloc() => AuthBloc(
-        loginUseCase: loginUseCase,
-        logoutUseCase: logoutUseCase,
-        registerUseCase: registerUseCase,
-        verifyOtpUseCase: verifyOtpUseCase,
-        resetPasswordUseCase: resetPasswordUseCase,
-      );
+    loginUseCase: loginUseCase,
+    logoutUseCase: logoutUseCase,
+    registerUseCase: registerUseCase,
+    verifyOtpUseCase: verifyOtpUseCase,
+    resetPasswordUseCase: resetPasswordUseCase,
+  );
 
   setUp(() {
     loginUseCase = MockLoginUseCase();
@@ -41,12 +41,13 @@ void main() {
   blocTest<AuthBloc, AuthState>(
     'emits loading then success on login',
     build: () {
-      when(() => loginUseCase(any())).thenAnswer((_) async => futureRightVoid());
+      when(
+        () => loginUseCase(any()),
+      ).thenAnswer((_) async => futureRightVoid());
       return buildBloc();
     },
-    act: (bloc) => bloc.add(
-      const AuthLoginRequested(email: 'a@b.com', password: 'pass'),
-    ),
+    act: (bloc) =>
+        bloc.add(const AuthLoginRequested(email: 'a@b.com', password: 'pass')),
     expect: () => [
       isA<AuthState>().having((s) => s.status, 'status', RequestStatus.loading),
       isA<AuthState>()
@@ -58,57 +59,71 @@ void main() {
   blocTest<AuthBloc, AuthState>(
     'emits failure on unauthorized login',
     build: () {
-      when(() => loginUseCase(any()))
-          .thenAnswer((_) async => futureLeft(FailureFixtures.unauthorized));
+      when(
+        () => loginUseCase(any()),
+      ).thenAnswer((_) async => futureLeft(FailureFixtures.unauthorized));
       return buildBloc();
     },
-    act: (bloc) => bloc.add(
-      const AuthLoginRequested(email: 'a@b.com', password: 'wrong'),
-    ),
+    act: (bloc) =>
+        bloc.add(const AuthLoginRequested(email: 'a@b.com', password: 'wrong')),
     expect: () => [
       isA<AuthState>().having((s) => s.status, 'status', RequestStatus.loading),
       isA<AuthState>()
           .having((s) => s.status, 'status', RequestStatus.failure)
-          .having((s) => s.errorMessage, 'error', FailureFixtures.unauthorized.message),
+          .having(
+            (s) => s.errorMessage,
+            'error',
+            FailureFixtures.unauthorized.message,
+          ),
     ],
   );
 
   blocTest<AuthBloc, AuthState>(
     'emits failure on network error',
     build: () {
-      when(() => loginUseCase(any()))
-          .thenAnswer((_) async => futureLeft(FailureFixtures.network));
+      when(
+        () => loginUseCase(any()),
+      ).thenAnswer((_) async => futureLeft(FailureFixtures.network));
       return buildBloc();
     },
-    act: (bloc) => bloc.add(
-      const AuthLoginRequested(email: 'a@b.com', password: 'pass'),
-    ),
+    act: (bloc) =>
+        bloc.add(const AuthLoginRequested(email: 'a@b.com', password: 'pass')),
     expect: () => [
       isA<AuthState>().having((s) => s.status, 'status', RequestStatus.loading),
-      isA<AuthState>().having((s) => s.errorMessage, 'error', FailureFixtures.network.message),
+      isA<AuthState>().having(
+        (s) => s.errorMessage,
+        'error',
+        FailureFixtures.network.message,
+      ),
     ],
   );
 
   blocTest<AuthBloc, AuthState>(
     'emits failure on timeout',
     build: () {
-      when(() => loginUseCase(any()))
-          .thenAnswer((_) async => futureLeft(FailureFixtures.timeout));
+      when(
+        () => loginUseCase(any()),
+      ).thenAnswer((_) async => futureLeft(FailureFixtures.timeout));
       return buildBloc();
     },
-    act: (bloc) => bloc.add(
-      const AuthLoginRequested(email: 'a@b.com', password: 'pass'),
-    ),
+    act: (bloc) =>
+        bloc.add(const AuthLoginRequested(email: 'a@b.com', password: 'pass')),
     expect: () => [
       isA<AuthState>().having((s) => s.status, 'status', RequestStatus.loading),
-      isA<AuthState>().having((s) => s.errorMessage, 'error', FailureFixtures.timeout.message),
+      isA<AuthState>().having(
+        (s) => s.errorMessage,
+        'error',
+        FailureFixtures.timeout.message,
+      ),
     ],
   );
 
   blocTest<AuthBloc, AuthState>(
     'logout clears authentication',
     build: () {
-      when(() => logoutUseCase(any())).thenAnswer((_) async => futureRightVoid());
+      when(
+        () => logoutUseCase(any()),
+      ).thenAnswer((_) async => futureRightVoid());
       return buildBloc();
     },
     act: (bloc) => bloc.add(const AuthLogoutRequested()),
@@ -122,7 +137,9 @@ void main() {
   blocTest<AuthBloc, AuthState>(
     'OTP verification authenticates user',
     build: () {
-      when(() => verifyOtpUseCase(any())).thenAnswer((_) async => futureRightVoid());
+      when(
+        () => verifyOtpUseCase(any()),
+      ).thenAnswer((_) async => futureRightVoid());
       return buildBloc();
     },
     act: (bloc) => bloc.add(const AuthOtpVerified('123456')),
@@ -148,7 +165,9 @@ void main() {
   blocTest<AuthBloc, AuthState>(
     'register emits success message',
     build: () {
-      when(() => registerUseCase(any())).thenAnswer((_) async => futureRightVoid());
+      when(
+        () => registerUseCase(any()),
+      ).thenAnswer((_) async => futureRightVoid());
       return buildBloc();
     },
     act: (bloc) => bloc.add(
@@ -169,14 +188,19 @@ void main() {
   blocTest<AuthBloc, AuthState>(
     'reset password emits failure on validation error',
     build: () {
-      when(() => resetPasswordUseCase(any()))
-          .thenAnswer((_) async => futureLeft(FailureFixtures.validation));
+      when(
+        () => resetPasswordUseCase(any()),
+      ).thenAnswer((_) async => futureLeft(FailureFixtures.validation));
       return buildBloc();
     },
     act: (bloc) => bloc.add(const AuthResetPasswordRequested('bad-email')),
     expect: () => [
       isA<AuthState>().having((s) => s.status, 'status', RequestStatus.loading),
-      isA<AuthState>().having((s) => s.errorMessage, 'error', FailureFixtures.validation.message),
+      isA<AuthState>().having(
+        (s) => s.errorMessage,
+        'error',
+        FailureFixtures.validation.message,
+      ),
     ],
   );
 }

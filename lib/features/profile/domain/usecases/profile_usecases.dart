@@ -4,10 +4,7 @@ import '../../../../shared/domain/entities/user.dart';
 import '../repositories/profile_repository.dart';
 
 class ProfileData {
-  const ProfileData({
-    required this.user,
-    required this.cardCount,
-  });
+  const ProfileData({required this.user, required this.cardCount});
 
   final UserProfile user;
   final int cardCount;

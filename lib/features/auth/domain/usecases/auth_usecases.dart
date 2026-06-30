@@ -15,10 +15,8 @@ class LoginUseCase implements UseCase<void, LoginParams> {
   final AuthRepository _repository;
 
   @override
-  ResultFuture<void> call(LoginParams params) => _repository.login(
-        email: params.email,
-        password: params.password,
-      );
+  ResultFuture<void> call(LoginParams params) =>
+      _repository.login(email: params.email, password: params.password);
 }
 
 class LogoutUseCase implements UseCase<void, NoParams> {
@@ -49,10 +47,10 @@ class RegisterUseCase implements UseCase<void, RegisterParams> {
 
   @override
   ResultFuture<void> call(RegisterParams params) => _repository.register(
-        name: params.name,
-        email: params.email,
-        password: params.password,
-      );
+    name: params.name,
+    email: params.email,
+    password: params.password,
+  );
 }
 
 class VerifyOtpParams {

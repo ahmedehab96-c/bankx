@@ -67,7 +67,9 @@ class BeneficiariesScreen extends StatelessWidget {
                         children: [
                           Text(
                             b.name,
-                            style: GoogleFonts.inter(fontWeight: FontWeight.w600),
+                            style: GoogleFonts.inter(
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                           Text(
                             '${b.bankName} • ${b.accountNumber}',

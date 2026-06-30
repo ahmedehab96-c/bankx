@@ -43,13 +43,13 @@ class _TransferMoneyScreenState extends State<TransferMoneyScreen> {
     if (amount == null || amount <= 0) return;
 
     context.read<TransferBloc>().add(
-          TransferSubmitted(
-            fromAccountId: _selectedAccountId!,
-            beneficiaryId: _selectedBeneficiary!.id,
-            amount: amount,
-            note: _noteController.text.isEmpty ? null : _noteController.text,
-          ),
-        );
+      TransferSubmitted(
+        fromAccountId: _selectedAccountId!,
+        beneficiaryId: _selectedBeneficiary!.id,
+        amount: amount,
+        note: _noteController.text.isEmpty ? null : _noteController.text,
+      ),
+    );
   }
 
   @override
@@ -62,9 +62,9 @@ class _TransferMoneyScreenState extends State<TransferMoneyScreen> {
           previous.submitStatus != current.submitStatus,
       listener: (context, state) {
         if (state.submitStatus == RequestStatus.success) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Transfer successful!')),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(const SnackBar(content: Text('Transfer successful!')));
           context.pop();
         }
       },

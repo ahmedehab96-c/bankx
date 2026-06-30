@@ -28,10 +28,7 @@ class CachedAppImage extends StatelessWidget {
 
   /// Prefetches an image into the disk/memory cache before it is displayed.
   static Future<void> prefetch(BuildContext context, String url) =>
-      precacheImage(
-        CachedNetworkImageProvider(url),
-        context,
-      );
+      precacheImage(CachedNetworkImageProvider(url), context);
 
   @override
   Widget build(BuildContext context) {

@@ -12,19 +12,16 @@ class AuthRepositoryImpl implements AuthRepository {
     required AuthRemoteDataSource remote,
     required AuthLocalDataSource local,
     required NetworkInfo networkInfo,
-  })  : _remote = remote,
-        _local = local,
-        _remoteResource = RemoteResource(networkInfo: networkInfo);
+  }) : _remote = remote,
+       _local = local,
+       _remoteResource = RemoteResource(networkInfo: networkInfo);
 
   final AuthRemoteDataSource _remote;
   final AuthLocalDataSource _local;
   final RemoteResource _remoteResource;
 
   @override
-  ResultFuture<void> login({
-    required String email,
-    required String password,
-  }) =>
+  ResultFuture<void> login({required String email, required String password}) =>
       _remoteResource.executeVoid(() async {
         final response = await _remote.login(email: email, password: password);
         await _local.saveSession(response);
@@ -35,10 +32,9 @@ class AuthRepositoryImpl implements AuthRepository {
     required String name,
     required String email,
     required String password,
-  }) =>
-      _remoteResource.executeVoid(() async {
-        await _remote.register(name: name, email: email, password: password);
-      });
+  }) => _remoteResource.executeVoid(() async {
+    await _remote.register(name: name, email: email, password: password);
+  });
 
   @override
   ResultFuture<void> verifyOtp({required String code}) =>
@@ -49,18 +45,16 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   ResultFuture<void> resetPassword({required String email}) =>
-      _remoteResource.executeVoid(
-        () => _remote.forgotPassword(email: email),
-      );
+      _remoteResource.executeVoid(() => _remote.forgotPassword(email: email));
 
   @override
   ResultFuture<void> logout() => _remoteResource.executeVoid(() async {
-        try {
-          await _remote.logout();
-        } finally {
-          await _local.clearSession();
-        }
-      });
+    try {
+      await _remote.logout();
+    } finally {
+      await _local.clearSession();
+    }
+  });
 
   @override
   ResultFuture<bool> isAuthenticated() async {
@@ -70,10 +64,10 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   ResultFuture<bool> refreshTokens() => _remoteResource.execute(() async {
-        final refresh = await _local.getRefreshToken();
-        if (refresh == null || refresh.isEmpty) return false;
-        final tokens = await _remote.refreshToken(refresh);
-        await _local.saveTokens(tokens);
-        return true;
-      });
+    final refresh = await _local.getRefreshToken();
+    if (refresh == null || refresh.isEmpty) return false;
+    final tokens = await _remote.refreshToken(refresh);
+    await _local.saveTokens(tokens);
+    return true;
+  });
 }

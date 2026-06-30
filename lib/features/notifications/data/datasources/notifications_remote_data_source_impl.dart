@@ -5,7 +5,8 @@ import '../../../../shared/data/mappers/banking_mappers.dart';
 import '../../../../shared/domain/entities/notification_model.dart';
 import 'notifications_remote_data_source.dart';
 
-class NotificationsRemoteDataSourceImpl implements NotificationsRemoteDataSource {
+class NotificationsRemoteDataSourceImpl
+    implements NotificationsRemoteDataSource {
   NotificationsRemoteDataSourceImpl(this._api, this._cache);
 
   final BankingApiService _api;

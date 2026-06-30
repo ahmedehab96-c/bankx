@@ -80,8 +80,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   controller: _nameController,
                   label: l10n.fullName,
                   prefixIcon: Icons.person_outline,
-                  validator: (v) =>
-                      v == null || v.isEmpty ? 'Required' : null,
+                  validator: (v) => v == null || v.isEmpty ? 'Required' : null,
                 ),
                 const SizedBox(height: 16),
                 AppTextField(
@@ -98,8 +97,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   label: l10n.phoneNumber,
                   prefixIcon: Icons.phone_outlined,
                   keyboardType: TextInputType.phone,
-                  validator: (v) =>
-                      v == null || v.isEmpty ? 'Required' : null,
+                  validator: (v) => v == null || v.isEmpty ? 'Required' : null,
                 ),
                 const SizedBox(height: 16),
                 AppTextField(
@@ -141,7 +139,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   children: [
                     Text(
                       l10n.alreadyHaveAccount,
-                      style: GoogleFonts.inter(color: Theme.of(context).hintColor),
+                      style: GoogleFonts.inter(
+                        color: Theme.of(context).hintColor,
+                      ),
                     ),
                     TextButton(
                       onPressed: () => context.pop(),

@@ -3,7 +3,7 @@ import 'package:local_auth/local_auth.dart';
 /// Fingerprint / Face ID authentication via [LocalAuthentication].
 class BiometricAuthService {
   BiometricAuthService({LocalAuthentication? localAuth})
-      : _localAuth = localAuth ?? LocalAuthentication();
+    : _localAuth = localAuth ?? LocalAuthentication();
 
   final LocalAuthentication _localAuth;
 

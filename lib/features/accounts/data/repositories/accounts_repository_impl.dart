@@ -11,9 +11,9 @@ class AccountsRepositoryImpl implements AccountsRepository {
     required AccountsLocalDataSource local,
     required AccountsRemoteDataSource remote,
     required NetworkInfo networkInfo,
-  })  : _local = local,
-        _remote = remote,
-        _networkInfo = networkInfo;
+  }) : _local = local,
+       _remote = remote,
+       _networkInfo = networkInfo;
 
   final AccountsLocalDataSource _local;
   final AccountsRemoteDataSource _remote;
@@ -21,9 +21,9 @@ class AccountsRepositoryImpl implements AccountsRepository {
 
   @override
   ResultFuture<BankAccount> getAccountById(String id) => NetworkBoundResource(
-        networkInfo: _networkInfo,
-        fetchRemote: () => _remote.fetchAccountById(id),
-        fetchLocal: () => _local.getCachedAccountById(id),
-        saveLocal: (_) async {},
-      ).execute();
+    networkInfo: _networkInfo,
+    fetchRemote: () => _remote.fetchAccountById(id),
+    fetchLocal: () => _local.getCachedAccountById(id),
+    saveLocal: (_) async {},
+  ).execute();
 }

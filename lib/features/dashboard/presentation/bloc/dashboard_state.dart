@@ -36,6 +36,11 @@ class DashboardState extends Equatable {
   }
 
   @override
-  List<Object?> get props =>
-      [status, analyticsStatus, dashboardData, analyticsData, errorMessage];
+  List<Object?> get props => [
+    status,
+    analyticsStatus,
+    dashboardData,
+    analyticsData,
+    errorMessage,
+  ];
 }

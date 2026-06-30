@@ -31,9 +31,7 @@ class CardDetailsScreen extends StatelessWidget {
 
         final card = state.selectedCard;
         if (card == null) {
-          return NotFoundBody(
-            message: state.errorMessage ?? 'Card not found',
-          );
+          return NotFoundBody(message: state.errorMessage ?? 'Card not found');
         }
 
         return AppScreenScaffold.scroll(
@@ -54,8 +52,9 @@ class CardDetailsScreen extends StatelessWidget {
               DetailInfoTile(label: l10n.cvv, value: card.cvv),
               DetailInfoTile(
                 label: l10n.status,
-                value:
-                    card.status == CardStatus.active ? l10n.active : l10n.frozen,
+                value: card.status == CardStatus.active
+                    ? l10n.active
+                    : l10n.frozen,
               ),
               const SizedBox(height: 28),
               SizedBox(

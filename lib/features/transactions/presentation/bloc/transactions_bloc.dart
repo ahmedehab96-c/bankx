@@ -9,9 +9,9 @@ class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
   TransactionsBloc({
     required GetTransactionsUseCase getTransactionsUseCase,
     required GetTransactionByIdUseCase getTransactionByIdUseCase,
-  })  : _getTransactionsUseCase = getTransactionsUseCase,
-        _getTransactionByIdUseCase = getTransactionByIdUseCase,
-        super(const TransactionsState()) {
+  }) : _getTransactionsUseCase = getTransactionsUseCase,
+       _getTransactionByIdUseCase = getTransactionByIdUseCase,
+       super(const TransactionsState()) {
     on<TransactionsLoaded>(_onTransactionsLoaded);
     on<TransactionDetailsLoaded>(_onTransactionDetailsLoaded);
   }
@@ -47,7 +47,9 @@ class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
     TransactionDetailsLoaded event,
     Emitter<TransactionsState> emit,
   ) async {
-    emit(state.copyWith(detailsStatus: RequestStatus.loading, clearError: true));
+    emit(
+      state.copyWith(detailsStatus: RequestStatus.loading, clearError: true),
+    );
     final result = await _getTransactionByIdUseCase(
       GetTransactionByIdParams(event.id),
     );

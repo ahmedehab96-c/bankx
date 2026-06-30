@@ -7,11 +7,7 @@ import '../utils/responsive.dart';
 
 /// Reusable transaction list tile for history and recent activity.
 class TransactionTile extends StatelessWidget {
-  const TransactionTile({
-    super.key,
-    required this.transaction,
-    this.onTap,
-  });
+  const TransactionTile({super.key, required this.transaction, this.onTap});
 
   final Transaction transaction;
   final VoidCallback? onTap;

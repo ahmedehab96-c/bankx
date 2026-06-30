@@ -10,15 +10,15 @@ class LoggerInterceptor extends ApiInterceptor {
   final PrettyDioLogger _logger;
 
   static LoggerInterceptor create() => LoggerInterceptor(
-        PrettyDioLogger(
-          requestHeader: true,
-          requestBody: true,
-          responseBody: true,
-          responseHeader: false,
-          error: true,
-          compact: true,
-        ),
-      );
+    PrettyDioLogger(
+      requestHeader: true,
+      requestBody: true,
+      responseBody: true,
+      responseHeader: false,
+      error: true,
+      compact: true,
+    ),
+  );
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {

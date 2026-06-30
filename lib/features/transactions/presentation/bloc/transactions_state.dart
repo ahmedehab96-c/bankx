@@ -36,6 +36,11 @@ class TransactionsState extends Equatable {
   }
 
   @override
-  List<Object?> get props =>
-      [listStatus, detailsStatus, transactions, selectedTransaction, errorMessage];
+  List<Object?> get props => [
+    listStatus,
+    detailsStatus,
+    transactions,
+    selectedTransaction,
+    errorMessage,
+  ];
 }

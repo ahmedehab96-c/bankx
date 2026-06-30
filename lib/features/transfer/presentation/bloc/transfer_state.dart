@@ -43,22 +43,22 @@ class TransferState extends Equatable {
       addBeneficiaryStatus: addBeneficiaryStatus ?? this.addBeneficiaryStatus,
       accounts: accounts ?? this.accounts,
       beneficiaries: beneficiaries ?? this.beneficiaries,
-      errorMessage:
-          clearMessages ? null : errorMessage ?? this.errorMessage,
-      successMessage:
-          clearMessages ? null : successMessage ?? this.successMessage,
+      errorMessage: clearMessages ? null : errorMessage ?? this.errorMessage,
+      successMessage: clearMessages
+          ? null
+          : successMessage ?? this.successMessage,
     );
   }
 
   @override
   List<Object?> get props => [
-        loadStatus,
-        beneficiariesStatus,
-        submitStatus,
-        addBeneficiaryStatus,
-        accounts,
-        beneficiaries,
-        errorMessage,
-        successMessage,
-      ];
+    loadStatus,
+    beneficiariesStatus,
+    submitStatus,
+    addBeneficiaryStatus,
+    accounts,
+    beneficiaries,
+    errorMessage,
+    successMessage,
+  ];
 }

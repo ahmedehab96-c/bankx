@@ -64,59 +64,56 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
             final balance = dashState.dashboardData?.totalBalance ?? 0;
 
             return CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              pinned: true,
-              title: Text(l10n.analytics),
-            ),
-            SliverPadding(
-              padding: EdgeInsets.all(padding),
-              sliver: SliverList(
-                delegate: SliverChildListDelegate([
-                  Text(
-                    l10n.spendingAnalytics,
-                    style: GoogleFonts.inter(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  RepaintBoundary(
-                    child: SpendingChart(
-                      weeklySpending: data.weeklySpending,
-                      weeklyLabels: data.weeklyLabels,
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: StatisticsCard(
-                          title: l10n.income,
-                          value:
-                              'AED ${data.totalIncome.toStringAsFixed(0)}',
-                          icon: Icons.arrow_downward_rounded,
-                          color: AppColors.income,
+              slivers: [
+                SliverAppBar(pinned: true, title: Text(l10n.analytics)),
+                SliverPadding(
+                  padding: EdgeInsets.all(padding),
+                  sliver: SliverList(
+                    delegate: SliverChildListDelegate([
+                      Text(
+                        l10n.spendingAnalytics,
+                        style: GoogleFonts.inter(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
-                      const SizedBox(width: 14),
-                      Expanded(
-                        child: StatisticsCard(
-                          title: l10n.expense,
-                          value:
-                              'AED ${data.totalExpense.toStringAsFixed(0)}',
-                          icon: Icons.arrow_upward_rounded,
-                          color: AppColors.expense,
+                      const SizedBox(height: 16),
+                      RepaintBoundary(
+                        child: SpendingChart(
+                          weeklySpending: data.weeklySpending,
+                          weeklyLabels: data.weeklyLabels,
                         ),
                       ),
-                    ],
+                      const SizedBox(height: 24),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: StatisticsCard(
+                              title: l10n.income,
+                              value:
+                                  'AED ${data.totalIncome.toStringAsFixed(0)}',
+                              icon: Icons.arrow_downward_rounded,
+                              color: AppColors.income,
+                            ),
+                          ),
+                          const SizedBox(width: 14),
+                          Expanded(
+                            child: StatisticsCard(
+                              title: l10n.expense,
+                              value:
+                                  'AED ${data.totalExpense.toStringAsFixed(0)}',
+                              icon: Icons.arrow_upward_rounded,
+                              color: AppColors.expense,
+                            ),
+                          ),
+                        ],
+                      ),
+                      AnalyticsAiSection(balance: balance),
+                    ]),
                   ),
-                  AnalyticsAiSection(balance: balance),
-                ]),
-              ),
-            ),
-          ],
-        );
+                ),
+              ],
+            );
           },
         );
       },

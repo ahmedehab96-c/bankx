@@ -41,14 +41,13 @@ class _FakeScreenshotProtectionService extends ScreenshotProtectionService {
 class _FakeGetPersonalizedInsightsUseCase
     implements GetPersonalizedInsightsUseCase {
   @override
-  ResultFuture<PersonalizedInsights> call(double params) async =>
-      const Right(
-        PersonalizedInsights(
-          monthlySummary: 'Test insights',
-          financeScore: 80,
-          savingSuggestions: [],
-          upcomingBills: [],
-          spendingHighlights: [],
-        ),
-      );
+  ResultFuture<PersonalizedInsights> call(double params) async => const Right(
+    PersonalizedInsights(
+      monthlySummary: 'Test insights',
+      financeScore: 80,
+      savingSuggestions: [],
+      upcomingBills: [],
+      spendingHighlights: [],
+    ),
+  );
 }

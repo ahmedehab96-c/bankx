@@ -25,8 +25,9 @@ abstract final class AppTheme {
         secondary: AppColors.accentCyan,
         surface: isDark ? AppColors.darkSurface : AppColors.lightSurface,
       ),
-      scaffoldBackgroundColor:
-          isDark ? AppColors.darkBackground : AppColors.lightBackground,
+      scaffoldBackgroundColor: isDark
+          ? AppColors.darkBackground
+          : AppColors.lightBackground,
       textTheme: GoogleFonts.interTextTheme(
         ThemeData(brightness: brightness).textTheme,
       ),
@@ -35,8 +36,9 @@ abstract final class AppTheme {
         centerTitle: true,
         scrolledUnderElevation: 0,
         backgroundColor: Colors.transparent,
-        foregroundColor:
-            isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
+        foregroundColor: isDark
+            ? AppColors.textPrimaryDark
+            : AppColors.textPrimaryLight,
         titleTextStyle: GoogleFonts.inter(
           fontSize: 18,
           fontWeight: FontWeight.w600,
@@ -60,8 +62,10 @@ abstract final class AppTheme {
           borderRadius: BorderRadius.circular(14),
           borderSide: const BorderSide(color: AppColors.primaryBlue, width: 2),
         ),
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 18,
+          vertical: 16,
+        ),
         hintStyle: TextStyle(
           color: isDark
               ? AppColors.textSecondaryDark

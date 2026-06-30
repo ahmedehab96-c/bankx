@@ -39,9 +39,9 @@ class AppTextField extends StatelessWidget {
       children: [
         Text(
           label,
-          style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                fontWeight: FontWeight.w600,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w600),
         ),
         const SizedBox(height: 8),
         TextFormField(
@@ -55,9 +55,7 @@ class AppTextField extends StatelessWidget {
           onFieldSubmitted: onSubmitted,
           decoration: InputDecoration(
             hintText: hint ?? label,
-            prefixIcon: prefixIcon != null
-                ? Icon(prefixIcon, size: 22)
-                : null,
+            prefixIcon: prefixIcon != null ? Icon(prefixIcon, size: 22) : null,
             suffixIcon: suffixIcon,
             counterText: '',
           ),

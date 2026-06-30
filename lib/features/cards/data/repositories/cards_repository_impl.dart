@@ -11,10 +11,10 @@ class CardsRepositoryImpl implements CardsRepository {
     required CardsLocalDataSource local,
     required CardsRemoteDataSource remote,
     required NetworkInfo networkInfo,
-  })  : _local = local,
-        _remote = remote,
-        _networkInfo = networkInfo,
-        _remoteResource = RemoteResource(networkInfo: networkInfo);
+  }) : _local = local,
+       _remote = remote,
+       _networkInfo = networkInfo,
+       _remoteResource = RemoteResource(networkInfo: networkInfo);
 
   final CardsLocalDataSource _local;
   final CardsRemoteDataSource _remote;
@@ -23,19 +23,19 @@ class CardsRepositoryImpl implements CardsRepository {
 
   @override
   ResultFuture<List<BankCard>> getCards() => NetworkBoundResource(
-        networkInfo: _networkInfo,
-        fetchRemote: _remote.fetchCards,
-        fetchLocal: _local.getCachedCards,
-        saveLocal: (_) async {},
-      ).execute();
+    networkInfo: _networkInfo,
+    fetchRemote: _remote.fetchCards,
+    fetchLocal: _local.getCachedCards,
+    saveLocal: (_) async {},
+  ).execute();
 
   @override
   ResultFuture<BankCard> getCardById(String id) => NetworkBoundResource(
-        networkInfo: _networkInfo,
-        fetchRemote: () => _remote.fetchCardById(id),
-        fetchLocal: () => _local.getCachedCardById(id),
-        saveLocal: (_) async {},
-      ).execute();
+    networkInfo: _networkInfo,
+    fetchRemote: () => _remote.fetchCardById(id),
+    fetchLocal: () => _local.getCachedCardById(id),
+    saveLocal: (_) async {},
+  ).execute();
 
   @override
   ResultFuture<BankCard> toggleCardFreeze(String cardId) =>

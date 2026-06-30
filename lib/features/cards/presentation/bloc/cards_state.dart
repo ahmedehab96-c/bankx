@@ -40,6 +40,12 @@ class CardsState extends Equatable {
   }
 
   @override
-  List<Object?> get props =>
-      [listStatus, detailsStatus, freezeStatus, cards, selectedCard, errorMessage];
+  List<Object?> get props => [
+    listStatus,
+    detailsStatus,
+    freezeStatus,
+    cards,
+    selectedCard,
+    errorMessage,
+  ];
 }

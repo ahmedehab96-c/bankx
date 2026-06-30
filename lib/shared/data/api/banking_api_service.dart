@@ -63,11 +63,7 @@ class BankingApiService {
   }) async {
     await _client.post<void>(
       ApiEndpoints.resetPassword,
-      data: {
-        'email': email,
-        'password': password,
-        'token': ?token,
-      },
+      data: {'email': email, 'password': password, 'token': ?token},
     );
   }
 
@@ -103,9 +99,9 @@ class BankingApiService {
       ApiEndpoints.transactions,
       queryParameters: type != null ? {'type': type} : null,
     );
-    return ApiResponseParser.asList(response.data)
-        .map(TransactionDto.fromJson)
-        .toList();
+    return ApiResponseParser.asList(
+      response.data,
+    ).map(TransactionDto.fromJson).toList();
   }
 
   Future<TransactionDto> getTransactionById(String id) async {
@@ -119,23 +115,20 @@ class BankingApiService {
 
   Future<List<AccountDto>> getTransferAccounts() async {
     final response = await _client.get<dynamic>(ApiEndpoints.transfers);
-    return ApiResponseParser.asList(response.data)
-        .map(AccountDto.fromJson)
-        .toList();
+    return ApiResponseParser.asList(
+      response.data,
+    ).map(AccountDto.fromJson).toList();
   }
 
   Future<List<BeneficiaryDto>> getBeneficiaries() async {
     final response = await _client.get<dynamic>(ApiEndpoints.beneficiaries);
-    return ApiResponseParser.asList(response.data)
-        .map(BeneficiaryDto.fromJson)
-        .toList();
+    return ApiResponseParser.asList(
+      response.data,
+    ).map(BeneficiaryDto.fromJson).toList();
   }
 
   Future<void> submitTransfer(TransferRequestDto request) async {
-    await _client.post<void>(
-      ApiEndpoints.transfers,
-      data: request.toJson(),
-    );
+    await _client.post<void>(ApiEndpoints.transfers, data: request.toJson());
   }
 
   Future<BeneficiaryDto> addBeneficiary({
@@ -158,7 +151,9 @@ class BankingApiService {
 
   Future<List<CardDto>> getCards() async {
     final response = await _client.get<dynamic>(ApiEndpoints.cards);
-    return ApiResponseParser.asList(response.data).map(CardDto.fromJson).toList();
+    return ApiResponseParser.asList(
+      response.data,
+    ).map(CardDto.fromJson).toList();
   }
 
   Future<CardDto> getCardById(String id) async {
@@ -185,19 +180,16 @@ class BankingApiService {
   }
 
   Future<void> submitBillPayment(BillPaymentRequestDto request) async {
-    await _client.post<void>(
-      ApiEndpoints.billPayment,
-      data: request.toJson(),
-    );
+    await _client.post<void>(ApiEndpoints.billPayment, data: request.toJson());
   }
 
   // ── Notifications ─────────────────────────────────────────────────────────────
 
   Future<List<NotificationDto>> getNotifications() async {
     final response = await _client.get<dynamic>(ApiEndpoints.notifications);
-    return ApiResponseParser.asList(response.data)
-        .map(NotificationDto.fromJson)
-        .toList();
+    return ApiResponseParser.asList(
+      response.data,
+    ).map(NotificationDto.fromJson).toList();
   }
 
   Future<void> markNotificationRead(int index) async {
@@ -223,26 +215,24 @@ class BankingApiService {
   }
 
   Future<void> updateSettings(SettingsDto settings) async {
-    await _client.put<void>(
-      ApiEndpoints.settings,
-      data: settings.toJson(),
-    );
+    await _client.put<void>(ApiEndpoints.settings, data: settings.toJson());
   }
 }
 
 /// Plain Dio client for token refresh (avoids interceptor recursion).
 class AuthRefreshClient {
   AuthRefreshClient({Dio? dio})
-      : _dio = dio ??
-            Dio(
-              BaseOptions(
-                baseUrl: ApiEndpoints.baseUrl,
-                headers: {
-                  'Content-Type': 'application/json',
-                  'Accept': 'application/json',
-                },
-              ),
-            );
+    : _dio =
+          dio ??
+          Dio(
+            BaseOptions(
+              baseUrl: ApiEndpoints.baseUrl,
+              headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+              },
+            ),
+          );
 
   final Dio _dio;
 
@@ -251,8 +241,6 @@ class AuthRefreshClient {
       ApiEndpoints.refreshToken,
       data: {'refresh_token': refreshToken},
     );
-    return AuthTokensDto.fromJson(
-      ApiResponseParser.asMap(response.data),
-    );
+    return AuthTokensDto.fromJson(ApiResponseParser.asMap(response.data));
   }
 }

@@ -36,21 +36,28 @@ git push -u origin main
 
 ## 3. GitHub Secrets (مطلوب للـ CI/CD)
 
-شغّل محلياً لطباعة قيم base64:
+**الحالة:** تم إعداد الأسرار الأساسية عبر `gh secret set` (ما عدا `FIREBASE_TOKEN`).
+
+شغّل مرة واحدة:
+
+```bash
+chmod +x scripts/setup_github_secrets.sh
+./scripts/setup_github_secrets.sh
+```
+
+أو يدوياً — طباعة base64:
 
 ```bash
 ./scripts/encode_firebase_secrets.sh
 ```
 
-ثم أضف في **GitHub → Settings → Secrets and variables → Actions**:
-
-| Secret | الوصف |
+| Secret | الحالة |
 |--------|--------|
-| `GOOGLE_SERVICES_JSON_BASE64` | من السكربت أعلاه |
-| `GOOGLE_SERVICE_INFO_PLIST_BASE64` | من السكربت أعلاه |
-| `FIREBASE_APP_ID_ANDROID` | `1:184700813147:android:8e939a394a823118e1e47e` |
-| `FIREBASE_APP_ID_IOS` | `1:184700813147:ios:55955d89bec707b5e1e47e` |
-| `FIREBASE_TOKEN` | `firebase login:ci` |
+| `GOOGLE_SERVICES_JSON_BASE64` | ✅ مضاف |
+| `GOOGLE_SERVICE_INFO_PLIST_BASE64` | ✅ مضاف |
+| `FIREBASE_APP_ID_ANDROID` | ✅ مضاف |
+| `FIREBASE_APP_ID_IOS` | ✅ مضاف |
+| `FIREBASE_TOKEN` | ⚠️ يدوي — انظر §4 |
 
 ### اختياري (توقيع + توزيع)
 

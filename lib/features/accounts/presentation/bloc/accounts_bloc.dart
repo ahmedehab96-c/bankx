@@ -7,8 +7,8 @@ import 'accounts_state.dart';
 
 class AccountsBloc extends Bloc<AccountsEvent, AccountsState> {
   AccountsBloc({required GetAccountByIdUseCase getAccountByIdUseCase})
-      : _getAccountByIdUseCase = getAccountByIdUseCase,
-        super(const AccountsState()) {
+    : _getAccountByIdUseCase = getAccountByIdUseCase,
+      super(const AccountsState()) {
     on<AccountDetailsLoaded>(_onAccountDetailsLoaded);
   }
 
@@ -19,9 +19,7 @@ class AccountsBloc extends Bloc<AccountsEvent, AccountsState> {
     Emitter<AccountsState> emit,
   ) async {
     emit(state.copyWith(status: RequestStatus.loading, clearError: true));
-    final result = await _getAccountByIdUseCase(
-      GetAccountByIdParams(event.id),
-    );
+    final result = await _getAccountByIdUseCase(GetAccountByIdParams(event.id));
     result.fold(
       (failure) => emit(
         state.copyWith(
@@ -29,12 +27,8 @@ class AccountsBloc extends Bloc<AccountsEvent, AccountsState> {
           errorMessage: failure.message,
         ),
       ),
-      (account) => emit(
-        state.copyWith(
-          status: RequestStatus.success,
-          account: account,
-        ),
-      ),
+      (account) =>
+          emit(state.copyWith(status: RequestStatus.success, account: account)),
     );
   }
 }

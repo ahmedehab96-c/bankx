@@ -68,8 +68,9 @@ class SessionManager {
   }
 
   Future<Duration> _loadTimeout() async {
-    final raw =
-        await _secureStorage.read(SecurityStorageKeys.sessionTimeoutMinutes);
+    final raw = await _secureStorage.read(
+      SecurityStorageKeys.sessionTimeoutMinutes,
+    );
     final minutes = int.tryParse(raw ?? '') ?? defaultTimeout.inMinutes;
     return Duration(minutes: minutes.clamp(1, 120));
   }

@@ -11,10 +11,10 @@ class CardsBloc extends Bloc<CardsEvent, CardsState> {
     required GetCardsUseCase getCardsUseCase,
     required GetCardByIdUseCase getCardByIdUseCase,
     required ToggleCardFreezeUseCase toggleCardFreezeUseCase,
-  })  : _getCardsUseCase = getCardsUseCase,
-        _getCardByIdUseCase = getCardByIdUseCase,
-        _toggleCardFreezeUseCase = toggleCardFreezeUseCase,
-        super(const CardsState()) {
+  }) : _getCardsUseCase = getCardsUseCase,
+       _getCardByIdUseCase = getCardByIdUseCase,
+       _toggleCardFreezeUseCase = toggleCardFreezeUseCase,
+       super(const CardsState()) {
     on<CardsLoaded>(_onCardsLoaded);
     on<CardDetailsLoaded>(_onCardDetailsLoaded);
     on<CardFreezeToggled>(_onCardFreezeToggled);
@@ -37,12 +37,8 @@ class CardsBloc extends Bloc<CardsEvent, CardsState> {
           errorMessage: failure.message,
         ),
       ),
-      (cards) => emit(
-        state.copyWith(
-          listStatus: RequestStatus.success,
-          cards: cards,
-        ),
-      ),
+      (cards) =>
+          emit(state.copyWith(listStatus: RequestStatus.success, cards: cards)),
     );
   }
 
@@ -50,7 +46,9 @@ class CardsBloc extends Bloc<CardsEvent, CardsState> {
     CardDetailsLoaded event,
     Emitter<CardsState> emit,
   ) async {
-    emit(state.copyWith(detailsStatus: RequestStatus.loading, clearError: true));
+    emit(
+      state.copyWith(detailsStatus: RequestStatus.loading, clearError: true),
+    );
     final result = await _getCardByIdUseCase(GetCardByIdParams(event.id));
     result.fold(
       (failure) => emit(
@@ -73,7 +71,9 @@ class CardsBloc extends Bloc<CardsEvent, CardsState> {
     Emitter<CardsState> emit,
   ) async {
     emit(state.copyWith(freezeStatus: RequestStatus.loading, clearError: true));
-    final result = await _toggleCardFreezeUseCase(ToggleCardFreezeParams(event.id));
+    final result = await _toggleCardFreezeUseCase(
+      ToggleCardFreezeParams(event.id),
+    );
     result.fold(
       (failure) => emit(
         state.copyWith(

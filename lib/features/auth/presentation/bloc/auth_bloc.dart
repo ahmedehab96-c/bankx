@@ -13,12 +13,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required RegisterUseCase registerUseCase,
     required VerifyOtpUseCase verifyOtpUseCase,
     required ResetPasswordUseCase resetPasswordUseCase,
-  })  : _loginUseCase = loginUseCase,
-        _logoutUseCase = logoutUseCase,
-        _registerUseCase = registerUseCase,
-        _verifyOtpUseCase = verifyOtpUseCase,
-        _resetPasswordUseCase = resetPasswordUseCase,
-        super(const AuthState()) {
+  }) : _loginUseCase = loginUseCase,
+       _logoutUseCase = logoutUseCase,
+       _registerUseCase = registerUseCase,
+       _verifyOtpUseCase = verifyOtpUseCase,
+       _resetPasswordUseCase = resetPasswordUseCase,
+       super(const AuthState()) {
     on<AuthLoginRequested>(_onLogin);
     on<AuthLogoutRequested>(_onLogout);
     on<AuthOtpVerified>(_onOtpVerified);
@@ -67,10 +67,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async {
     await _logoutUseCase(const NoParams());
     emit(
-      const AuthState(
-        status: RequestStatus.success,
-        isAuthenticated: false,
-      ),
+      const AuthState(status: RequestStatus.success, isAuthenticated: false),
     );
   }
 
@@ -88,10 +85,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         ),
       ),
       (_) => emit(
-        state.copyWith(
-          status: RequestStatus.success,
-          isAuthenticated: true,
-        ),
+        state.copyWith(status: RequestStatus.success, isAuthenticated: true),
       ),
     );
   }
@@ -148,15 +142,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     );
   }
 
-  void _onSessionRestored(
-    AuthSessionRestored event,
-    Emitter<AuthState> emit,
-  ) {
-    emit(
-      state.copyWith(
-        status: RequestStatus.success,
-        isAuthenticated: true,
-      ),
-    );
+  void _onSessionRestored(AuthSessionRestored event, Emitter<AuthState> emit) {
+    emit(state.copyWith(status: RequestStatus.success, isAuthenticated: true));
   }
 }

@@ -10,9 +10,9 @@ class PaymentsBloc extends Bloc<PaymentsEvent, PaymentsState> {
   PaymentsBloc({
     required GetQrPaymentDataUseCase getQrPaymentDataUseCase,
     required SubmitBillPaymentUseCase submitBillPaymentUseCase,
-  })  : _getQrPaymentDataUseCase = getQrPaymentDataUseCase,
-        _submitBillPaymentUseCase = submitBillPaymentUseCase,
-        super(const PaymentsState()) {
+  }) : _getQrPaymentDataUseCase = getQrPaymentDataUseCase,
+       _submitBillPaymentUseCase = submitBillPaymentUseCase,
+       super(const PaymentsState()) {
     on<QrPaymentLoaded>(_onQrPaymentLoaded);
     on<BillPaymentSubmitted>(_onBillPaymentSubmitted);
   }
@@ -34,10 +34,7 @@ class PaymentsBloc extends Bloc<PaymentsEvent, PaymentsState> {
         ),
       ),
       (data) => emit(
-        state.copyWith(
-          qrStatus: RequestStatus.success,
-          qrPaymentData: data,
-        ),
+        state.copyWith(qrStatus: RequestStatus.success, qrPaymentData: data),
       ),
     );
   }
@@ -46,12 +43,11 @@ class PaymentsBloc extends Bloc<PaymentsEvent, PaymentsState> {
     BillPaymentSubmitted event,
     Emitter<PaymentsState> emit,
   ) async {
-    emit(state.copyWith(billStatus: RequestStatus.loading, clearMessages: true));
+    emit(
+      state.copyWith(billStatus: RequestStatus.loading, clearMessages: true),
+    );
     final result = await _submitBillPaymentUseCase(
-      SubmitBillPaymentParams(
-        amount: event.amount,
-        billType: event.billType,
-      ),
+      SubmitBillPaymentParams(amount: event.amount, billType: event.billType),
     );
     result.fold(
       (failure) => emit(

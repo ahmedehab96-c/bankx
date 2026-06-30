@@ -28,9 +28,7 @@ class BankCard {
   final String currency;
   final List<int> gradientColors;
 
-  BankCard copyWith({
-    CardStatus? status,
-  }) {
+  BankCard copyWith({CardStatus? status}) {
     return BankCard(
       id: id,
       cardNumber: cardNumber,

@@ -29,8 +29,8 @@ class BankingCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = gradientColors ??
-        const [AppColors.primaryBlue, AppColors.primaryDark];
+    final colors =
+        gradientColors ?? const [AppColors.primaryBlue, AppColors.primaryDark];
 
     return GestureDetector(
       onTap: onTap,

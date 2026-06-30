@@ -28,7 +28,10 @@ class ProfileTile extends StatelessWidget {
       children: [
         ListTile(
           onTap: onTap,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 4,
+            vertical: 2,
+          ),
           leading: Container(
             width: 42,
             height: 42,
@@ -56,15 +59,10 @@ class ProfileTile extends StatelessWidget {
                   ),
                 )
               : null,
-          trailing: trailing ??
-              const Icon(Icons.chevron_right, size: 22),
+          trailing: trailing ?? const Icon(Icons.chevron_right, size: 22),
         ),
         if (showDivider)
-          Divider(
-            height: 1,
-            indent: 58,
-            color: Theme.of(context).dividerColor,
-          ),
+          Divider(height: 1, indent: 58, color: Theme.of(context).dividerColor),
       ],
     );
   }

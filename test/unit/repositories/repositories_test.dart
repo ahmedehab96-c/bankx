@@ -45,8 +45,12 @@ void main() {
 
     test('login saves session on success', () async {
       when(() => network.isConnected).thenAnswer((_) async => true);
-      when(() => remote.login(email: any(named: 'email'), password: any(named: 'password')))
-          .thenAnswer((_) async => FakeApiResponses.login);
+      when(
+        () => remote.login(
+          email: any(named: 'email'),
+          password: any(named: 'password'),
+        ),
+      ).thenAnswer((_) async => FakeApiResponses.login);
       when(() => local.saveSession(any())).thenAnswer((_) async {});
 
       final result = await repository.login(email: 'a@b.com', password: 'pass');
@@ -94,7 +98,9 @@ void main() {
 
     test('getDashboardData fetches remote when online', () async {
       when(() => network.isConnected).thenAnswer((_) async => true);
-      when(() => remote.fetchDashboardData()).thenAnswer((_) async => TestFixtures.dashboardData);
+      when(
+        () => remote.fetchDashboardData(),
+      ).thenAnswer((_) async => TestFixtures.dashboardData);
 
       final result = await repository.getDashboardData();
       expect(result.isRight(), isTrue);
@@ -105,7 +111,9 @@ void main() {
 
     test('getDashboardData uses cache when offline', () async {
       when(() => network.isConnected).thenAnswer((_) async => false);
-      when(() => local.getCachedDashboardData()).thenAnswer((_) async => TestFixtures.dashboardData);
+      when(
+        () => local.getCachedDashboardData(),
+      ).thenAnswer((_) async => TestFixtures.dashboardData);
 
       final result = await repository.getDashboardData();
       expect(result.isRight(), isTrue);
@@ -140,7 +148,9 @@ void main() {
 
     test('getAccountById returns remote account online', () async {
       when(() => network.isConnected).thenAnswer((_) async => true);
-      when(() => remote.fetchAccountById('acc-1')).thenAnswer((_) async => TestFixtures.account);
+      when(
+        () => remote.fetchAccountById('acc-1'),
+      ).thenAnswer((_) async => TestFixtures.account);
 
       final result = await repository.getAccountById('acc-1');
       expect(result.isRight(), isTrue);
@@ -164,9 +174,9 @@ void main() {
 
     test('getTransactions filters cached list by type', () async {
       when(() => network.isConnected).thenAnswer((_) async => false);
-      when(() => local.getCachedTransactions()).thenAnswer(
-        (_) async => [TestFixtures.transaction],
-      );
+      when(
+        () => local.getCachedTransactions(),
+      ).thenAnswer((_) async => [TestFixtures.transaction]);
 
       final result = await repository.getTransactions(
         type: TestFixtures.transaction.type,
@@ -248,7 +258,9 @@ void main() {
     test('toggleCardFreeze returns updated card', () async {
       when(() => network.isConnected).thenAnswer((_) async => true);
       final frozen = TestFixtures.card.copyWith(status: CardStatus.frozen);
-      when(() => remote.toggleCardFreeze('card-1')).thenAnswer((_) async => frozen);
+      when(
+        () => remote.toggleCardFreeze('card-1'),
+      ).thenAnswer((_) async => frozen);
 
       final result = await repository.toggleCardFreeze('card-1');
       expect(result.isRight(), isTrue);
@@ -275,7 +287,9 @@ void main() {
 
     test('getQrPaymentData returns cached data offline', () async {
       when(() => network.isConnected).thenAnswer((_) async => false);
-      when(() => local.getCachedQrPaymentData()).thenAnswer((_) async => TestFixtures.qrPaymentData);
+      when(
+        () => local.getCachedQrPaymentData(),
+      ).thenAnswer((_) async => TestFixtures.qrPaymentData);
 
       final result = await repository.getQrPaymentData();
       expect(result.isRight(), isTrue);
@@ -283,7 +297,10 @@ void main() {
 
     test('submitBillPayment fails offline', () async {
       when(() => network.isConnected).thenAnswer((_) async => false);
-      final result = await repository.submitBillPayment(amount: 100, billType: 'electricity');
+      final result = await repository.submitBillPayment(
+        amount: 100,
+        billType: 'electricity',
+      );
       expect(result, testLeftVoid(const NetworkFailure()));
     });
   });
@@ -305,7 +322,9 @@ void main() {
 
     test('getNotifications returns remote list online', () async {
       when(() => network.isConnected).thenAnswer((_) async => true);
-      when(() => remote.fetchNotifications()).thenAnswer((_) async => [TestFixtures.notification]);
+      when(
+        () => remote.fetchNotifications(),
+      ).thenAnswer((_) async => [TestFixtures.notification]);
 
       final result = await repository.getNotifications();
       expect(result.fold((l) => 0, (r) => r.length), 1);
@@ -329,7 +348,9 @@ void main() {
 
     test('getProfileData returns cached profile offline', () async {
       when(() => network.isConnected).thenAnswer((_) async => false);
-      when(() => local.getCachedProfileData()).thenAnswer((_) async => TestFixtures.profileData);
+      when(
+        () => local.getCachedProfileData(),
+      ).thenAnswer((_) async => TestFixtures.profileData);
 
       final result = await repository.getProfileData();
       expect(result.isRight(), isTrue);
@@ -353,7 +374,9 @@ void main() {
 
     test('getSettings persists theme and locale from remote', () async {
       when(() => network.isConnected).thenAnswer((_) async => true);
-      when(() => remote.fetchSettings()).thenAnswer((_) async => FakeApiResponses.settings);
+      when(
+        () => remote.fetchSettings(),
+      ).thenAnswer((_) async => FakeApiResponses.settings);
       when(() => local.saveThemeMode(any())).thenAnswer((_) async {});
       when(() => local.saveLocale(any())).thenAnswer((_) async {});
 

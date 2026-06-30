@@ -74,8 +74,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: [
                         CircleAvatar(
                           radius: 48,
-                          backgroundColor:
-                              AppColors.primaryBlue.withValues(alpha: 0.15),
+                          backgroundColor: AppColors.primaryBlue.withValues(
+                            alpha: 0.15,
+                          ),
                           child: Text(
                             user.name[0],
                             style: GoogleFonts.inter(

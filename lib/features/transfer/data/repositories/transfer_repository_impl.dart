@@ -20,12 +20,12 @@ class TransferRepositoryImpl implements TransferRepository {
     required NetworkInfo networkInfo,
     required CacheStorageService cache,
     OfflineSyncService? offlineSync,
-  })  : _local = local,
-        _remote = remote,
-        _networkInfo = networkInfo,
-        _cache = cache,
-        _offlineSync = offlineSync,
-        _remoteResource = RemoteResource(networkInfo: networkInfo);
+  }) : _local = local,
+       _remote = remote,
+       _networkInfo = networkInfo,
+       _cache = cache,
+       _offlineSync = offlineSync,
+       _remoteResource = RemoteResource(networkInfo: networkInfo);
 
   final TransferLocalDataSource _local;
   final TransferRemoteDataSource _remote;
@@ -36,20 +36,19 @@ class TransferRepositoryImpl implements TransferRepository {
 
   @override
   ResultFuture<List<BankAccount>> getAccounts() => NetworkBoundResource(
-        networkInfo: _networkInfo,
-        fetchRemote: _remote.fetchAccounts,
-        fetchLocal: _local.getCachedAccounts,
-        saveLocal: (_) async {},
-      ).execute();
+    networkInfo: _networkInfo,
+    fetchRemote: _remote.fetchAccounts,
+    fetchLocal: _local.getCachedAccounts,
+    saveLocal: (_) async {},
+  ).execute();
 
   @override
-  ResultFuture<List<Beneficiary>> getBeneficiaries() =>
-      NetworkBoundResource(
-        networkInfo: _networkInfo,
-        fetchRemote: _remote.fetchBeneficiaries,
-        fetchLocal: _local.getCachedBeneficiaries,
-        saveLocal: (_) async {},
-      ).execute();
+  ResultFuture<List<Beneficiary>> getBeneficiaries() => NetworkBoundResource(
+    networkInfo: _networkInfo,
+    fetchRemote: _remote.fetchBeneficiaries,
+    fetchLocal: _local.getCachedBeneficiaries,
+    saveLocal: (_) async {},
+  ).execute();
 
   @override
   ResultFuture<void> transfer({
@@ -87,14 +86,11 @@ class TransferRepositoryImpl implements TransferRepository {
     required String name,
     required String bankName,
     required String accountNumber,
-  }) =>
-      _remoteResource.executeVoid(
-        () async {
-          await _remote.submitBeneficiary(
-            name: name,
-            bankName: bankName,
-            accountNumber: accountNumber,
-          );
-        },
-      );
+  }) => _remoteResource.executeVoid(() async {
+    await _remote.submitBeneficiary(
+      name: name,
+      bankName: bankName,
+      accountNumber: accountNumber,
+    );
+  });
 }

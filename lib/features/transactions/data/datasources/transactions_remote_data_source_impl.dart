@@ -14,9 +14,7 @@ class TransactionsRemoteDataSourceImpl implements TransactionsRemoteDataSource {
   @override
   Future<List<Transaction>> fetchTransactions({TransactionType? type}) async {
     try {
-      final dtos = await _api.getTransactions(
-        type: type?.name,
-      );
+      final dtos = await _api.getTransactions(type: type?.name);
       await _cache.writeList(
         CacheKeys.transactions,
         dtos.map((e) => e.toJson()).toList(),

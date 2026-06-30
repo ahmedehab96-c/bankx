@@ -113,7 +113,10 @@ class _FaqItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExpansionTile(
-      title: Text(question, style: GoogleFonts.inter(fontWeight: FontWeight.w600)),
+      title: Text(
+        question,
+        style: GoogleFonts.inter(fontWeight: FontWeight.w600),
+      ),
       children: [
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),

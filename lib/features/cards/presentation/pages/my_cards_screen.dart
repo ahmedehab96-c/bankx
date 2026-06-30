@@ -95,8 +95,7 @@ class _CardListItem extends StatelessWidget {
       child: Stack(
         children: [
           BankingCard(
-            title:
-                card.type == CardType.virtual ? l10n.virtual : l10n.physical,
+            title: card.type == CardType.virtual ? l10n.virtual : l10n.physical,
             subtitle: card.cardNumber,
             balance: card.balance,
             currency: card.currency,
@@ -122,7 +121,11 @@ class _CardListItem extends StatelessWidget {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(Icons.ac_unit, color: Colors.white, size: 18),
+                        const Icon(
+                          Icons.ac_unit,
+                          color: Colors.white,
+                          size: 18,
+                        ),
                         const SizedBox(width: 6),
                         Text(
                           l10n.frozen,

@@ -19,30 +19,34 @@ void main() {
   setUpAll(registerBlocTestFallbacks);
 
   group('Repository performance', () {
-    test('NetworkBoundResource completes under 50ms with fast remote', () async {
-      final network = MockNetworkInfo();
-      when(() => network.isConnected).thenAnswer((_) async => true);
+    test(
+      'NetworkBoundResource completes under 50ms with fast remote',
+      () async {
+        final network = MockNetworkInfo();
+        when(() => network.isConnected).thenAnswer((_) async => true);
 
-      final stopwatch = Stopwatch()..start();
-      final result = await NetworkBoundResource<int>(
-        networkInfo: network,
-        fetchRemote: () async => 1,
-        fetchLocal: () async => null,
-        saveLocal: (_) async {},
-      ).execute();
-      stopwatch.stop();
+        final stopwatch = Stopwatch()..start();
+        final result = await NetworkBoundResource<int>(
+          networkInfo: network,
+          fetchRemote: () async => 1,
+          fetchLocal: () async => null,
+          saveLocal: (_) async {},
+        ).execute();
+        stopwatch.stop();
 
-      expect(result, testRight(1));
-      expect(stopwatch.elapsedMilliseconds, lessThan(50));
-    });
+        expect(result, testRight(1));
+        expect(stopwatch.elapsedMilliseconds, lessThan(50));
+      },
+    );
   });
 
   group('Bloc performance', () {
     test('DashboardBloc handles 100 rapid events', () async {
       final dashboard = MockGetDashboardDataUseCase();
       final analytics = MockGetAnalyticsDataUseCase();
-      when(() => dashboard(any()))
-          .thenAnswer((_) async => Right(TestFixtures.dashboardData));
+      when(
+        () => dashboard(any()),
+      ).thenAnswer((_) async => Right(TestFixtures.dashboardData));
 
       final bloc = DashboardBloc(
         getDashboardDataUseCase: dashboard,

@@ -30,14 +30,19 @@ class PaymentsState extends Equatable {
       qrStatus: qrStatus ?? this.qrStatus,
       billStatus: billStatus ?? this.billStatus,
       qrPaymentData: qrPaymentData ?? this.qrPaymentData,
-      errorMessage:
-          clearMessages ? null : errorMessage ?? this.errorMessage,
-      successMessage:
-          clearMessages ? null : successMessage ?? this.successMessage,
+      errorMessage: clearMessages ? null : errorMessage ?? this.errorMessage,
+      successMessage: clearMessages
+          ? null
+          : successMessage ?? this.successMessage,
     );
   }
 
   @override
-  List<Object?> get props =>
-      [qrStatus, billStatus, qrPaymentData, errorMessage, successMessage];
+  List<Object?> get props => [
+    qrStatus,
+    billStatus,
+    qrPaymentData,
+    errorMessage,
+    successMessage,
+  ];
 }

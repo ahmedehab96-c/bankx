@@ -15,12 +15,12 @@ class SecurityRepositoryImpl implements SecurityRepository {
     required DeviceIntegrityChecker deviceIntegrity,
     required RootDetectionService rootDetection,
     required JailbreakDetectionService jailbreakDetection,
-  })  : _biometricAuth = biometricAuth,
-        _pinLock = pinLock,
-        _secureStorage = secureStorage,
-        _deviceIntegrity = deviceIntegrity,
-        _rootDetection = rootDetection,
-        _jailbreakDetection = jailbreakDetection;
+  }) : _biometricAuth = biometricAuth,
+       _pinLock = pinLock,
+       _secureStorage = secureStorage,
+       _deviceIntegrity = deviceIntegrity,
+       _rootDetection = rootDetection,
+       _jailbreakDetection = jailbreakDetection;
 
   final BiometricAuthService _biometricAuth;
   final PinLockService _pinLock;
@@ -31,13 +31,14 @@ class SecurityRepositoryImpl implements SecurityRepository {
 
   @override
   Future<bool> isBiometricEnabled() async =>
-      (await _secureStorage.read(SecurityStorageKeys.biometricEnabled)) == 'true';
+      (await _secureStorage.read(SecurityStorageKeys.biometricEnabled)) ==
+      'true';
 
   @override
   Future<void> setBiometricEnabled(bool enabled) => _secureStorage.write(
-        SecurityStorageKeys.biometricEnabled,
-        enabled.toString(),
-      );
+    SecurityStorageKeys.biometricEnabled,
+    enabled.toString(),
+  );
 
   @override
   Future<bool> authenticateWithBiometrics() => _biometricAuth.authenticate();

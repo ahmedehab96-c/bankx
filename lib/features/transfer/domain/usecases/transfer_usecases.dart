@@ -46,11 +46,11 @@ class TransferMoneyUseCase implements UseCase<void, TransferMoneyParams> {
 
   @override
   ResultFuture<void> call(TransferMoneyParams params) => _repository.transfer(
-        fromAccountId: params.fromAccountId,
-        beneficiaryId: params.beneficiaryId,
-        amount: params.amount,
-        note: params.note,
-      );
+    fromAccountId: params.fromAccountId,
+    beneficiaryId: params.beneficiaryId,
+    amount: params.amount,
+    note: params.note,
+  );
 }
 
 class AddBeneficiaryParams {

@@ -29,8 +29,7 @@ class TransferSubmitted extends TransferEvent {
   final String? note;
 
   @override
-  List<Object?> get props =>
-      [fromAccountId, beneficiaryId, amount, note];
+  List<Object?> get props => [fromAccountId, beneficiaryId, amount, note];
 }
 
 class AddBeneficiarySubmitted extends TransferEvent {

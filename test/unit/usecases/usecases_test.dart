@@ -40,7 +40,9 @@ void main() {
     });
 
     test('LogoutUseCase delegates to repository', () async {
-      when(() => repository.logout()).thenAnswer((_) async => futureRightVoid());
+      when(
+        () => repository.logout(),
+      ).thenAnswer((_) async => futureRightVoid());
       final result = await LogoutUseCase(repository)(const NoParams());
       expect(result, testRightVoid);
     });
@@ -67,18 +69,24 @@ void main() {
     setUp(() => repository = MockDashboardRepository());
 
     test('GetDashboardDataUseCase returns dashboard', () async {
-      when(() => repository.getDashboardData())
-          .thenAnswer((_) async => Right(TestFixtures.dashboardData));
+      when(
+        () => repository.getDashboardData(),
+      ).thenAnswer((_) async => Right(TestFixtures.dashboardData));
 
-      final result = await GetDashboardDataUseCase(repository)(const NoParams());
+      final result = await GetDashboardDataUseCase(repository)(
+        const NoParams(),
+      );
       expect(result.isRight(), isTrue);
     });
 
     test('GetAnalyticsDataUseCase returns analytics', () async {
-      when(() => repository.getAnalyticsData())
-          .thenAnswer((_) async => Right(TestFixtures.analyticsData));
+      when(
+        () => repository.getAnalyticsData(),
+      ).thenAnswer((_) async => Right(TestFixtures.analyticsData));
 
-      final result = await GetAnalyticsDataUseCase(repository)(const NoParams());
+      final result = await GetAnalyticsDataUseCase(repository)(
+        const NoParams(),
+      );
       expect(result.isRight(), isTrue);
     });
   });
@@ -86,8 +94,9 @@ void main() {
   group('Accounts use cases', () {
     test('GetAccountByIdUseCase delegates id', () async {
       final repository = MockAccountsRepository();
-      when(() => repository.getAccountById('acc-1'))
-          .thenAnswer((_) async => const Right(TestFixtures.account));
+      when(
+        () => repository.getAccountById('acc-1'),
+      ).thenAnswer((_) async => const Right(TestFixtures.account));
 
       final result = await GetAccountByIdUseCase(repository)(
         const GetAccountByIdParams('acc-1'),
@@ -99,8 +108,9 @@ void main() {
   group('Transactions use cases', () {
     test('GetTransactionsUseCase passes type filter', () async {
       final repository = MockTransactionsRepository();
-      when(() => repository.getTransactions(type: any(named: 'type')))
-          .thenAnswer((_) async => Right([TestFixtures.transaction]));
+      when(
+        () => repository.getTransactions(type: any(named: 'type')),
+      ).thenAnswer((_) async => Right([TestFixtures.transaction]));
 
       final result = await GetTransactionsUseCase(repository)(
         const GetTransactionsParams(),
@@ -135,8 +145,9 @@ void main() {
   group('Cards use cases', () {
     test('ToggleCardFreezeUseCase delegates freeze', () async {
       final repository = MockCardsRepository();
-      when(() => repository.toggleCardFreeze('card-1'))
-          .thenAnswer((_) async => const Right(TestFixtures.card));
+      when(
+        () => repository.toggleCardFreeze('card-1'),
+      ).thenAnswer((_) async => const Right(TestFixtures.card));
 
       final result = await ToggleCardFreezeUseCase(repository)(
         const ToggleCardFreezeParams('card-1'),
@@ -148,10 +159,13 @@ void main() {
   group('Payments use cases', () {
     test('GetQrPaymentDataUseCase returns QR data', () async {
       final repository = MockPaymentsRepository();
-      when(() => repository.getQrPaymentData())
-          .thenAnswer((_) async => Right(TestFixtures.qrPaymentData));
+      when(
+        () => repository.getQrPaymentData(),
+      ).thenAnswer((_) async => Right(TestFixtures.qrPaymentData));
 
-      final result = await GetQrPaymentDataUseCase(repository)(const NoParams());
+      final result = await GetQrPaymentDataUseCase(repository)(
+        const NoParams(),
+      );
       expect(result.isRight(), isTrue);
     });
 
@@ -171,8 +185,9 @@ void main() {
   group('Notifications use cases', () {
     test('MarkNotificationReadUseCase delegates index', () async {
       final repository = MockNotificationsRepository();
-      when(() => repository.markNotificationRead(0))
-          .thenAnswer((_) async => Right([TestFixtures.notification]));
+      when(
+        () => repository.markNotificationRead(0),
+      ).thenAnswer((_) async => Right([TestFixtures.notification]));
 
       final result = await MarkNotificationReadUseCase(repository)(
         const MarkNotificationReadParams(0),
@@ -184,8 +199,9 @@ void main() {
   group('Profile use cases', () {
     test('GetProfileDataUseCase returns profile', () async {
       final repository = MockProfileRepository();
-      when(() => repository.getProfileData())
-          .thenAnswer((_) async => Right(TestFixtures.profileData));
+      when(
+        () => repository.getProfileData(),
+      ).thenAnswer((_) async => Right(TestFixtures.profileData));
 
       final result = await GetProfileDataUseCase(repository)(const NoParams());
       expect(result.isRight(), isTrue);
@@ -195,8 +211,9 @@ void main() {
   group('Settings use cases', () {
     test('SetThemeModeUseCase delegates theme', () async {
       final repository = MockSettingsRepository();
-      when(() => repository.setThemeMode(ThemeMode.dark))
-          .thenAnswer((_) async => futureRightVoid());
+      when(
+        () => repository.setThemeMode(ThemeMode.dark),
+      ).thenAnswer((_) async => futureRightVoid());
 
       final result = await SetThemeModeUseCase(repository)(
         const SetThemeModeParams(ThemeMode.dark),
@@ -206,8 +223,9 @@ void main() {
 
     test('SetLocaleUseCase delegates locale', () async {
       final repository = MockSettingsRepository();
-      when(() => repository.setLocale(const Locale('ar')))
-          .thenAnswer((_) async => futureRightVoid());
+      when(
+        () => repository.setLocale(const Locale('ar')),
+      ).thenAnswer((_) async => futureRightVoid());
 
       final result = await SetLocaleUseCase(repository)(
         const SetLocaleParams(Locale('ar')),

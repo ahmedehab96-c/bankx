@@ -50,20 +50,25 @@ void main() {
     });
 
     DashboardBloc build() => DashboardBloc(
-          getDashboardDataUseCase: dashboardUseCase,
-          getAnalyticsDataUseCase: analyticsUseCase,
-        );
+      getDashboardDataUseCase: dashboardUseCase,
+      getAnalyticsDataUseCase: analyticsUseCase,
+    );
 
     blocTest<DashboardBloc, DashboardState>(
       'loads dashboard successfully',
       build: () {
-        when(() => dashboardUseCase(any()))
-            .thenAnswer((_) async => Right(TestFixtures.dashboardData));
+        when(
+          () => dashboardUseCase(any()),
+        ).thenAnswer((_) async => Right(TestFixtures.dashboardData));
         return build();
       },
       act: (bloc) => bloc.add(const DashboardLoaded()),
       expect: () => [
-        isA<DashboardState>().having((s) => s.status, 'status', RequestStatus.loading),
+        isA<DashboardState>().having(
+          (s) => s.status,
+          'status',
+          RequestStatus.loading,
+        ),
         isA<DashboardState>()
             .having((s) => s.status, 'status', RequestStatus.success)
             .having((s) => s.dashboardData?.totalBalance, 'balance', 25000),
@@ -73,14 +78,23 @@ void main() {
     blocTest<DashboardBloc, DashboardState>(
       'emits failure when offline',
       build: () {
-        when(() => dashboardUseCase(any()))
-            .thenAnswer((_) async => futureLeft(FailureFixtures.network));
+        when(
+          () => dashboardUseCase(any()),
+        ).thenAnswer((_) async => futureLeft(FailureFixtures.network));
         return build();
       },
       act: (bloc) => bloc.add(const DashboardLoaded()),
       expect: () => [
-        isA<DashboardState>().having((s) => s.status, 'status', RequestStatus.loading),
-        isA<DashboardState>().having((s) => s.errorMessage, 'error', FailureFixtures.network.message),
+        isA<DashboardState>().having(
+          (s) => s.status,
+          'status',
+          RequestStatus.loading,
+        ),
+        isA<DashboardState>().having(
+          (s) => s.errorMessage,
+          'error',
+          FailureFixtures.network.message,
+        ),
       ],
     );
   });
@@ -90,12 +104,18 @@ void main() {
       'loads account details',
       build: () {
         final useCase = MockGetAccountByIdUseCase();
-        when(() => useCase(any())).thenAnswer((_) async => const Right(TestFixtures.account));
+        when(
+          () => useCase(any()),
+        ).thenAnswer((_) async => const Right(TestFixtures.account));
         return AccountsBloc(getAccountByIdUseCase: useCase);
       },
       act: (bloc) => bloc.add(const AccountDetailsLoaded('acc-1')),
       expect: () => [
-        isA<AccountsState>().having((s) => s.status, 'status', RequestStatus.loading),
+        isA<AccountsState>().having(
+          (s) => s.status,
+          'status',
+          RequestStatus.loading,
+        ),
         isA<AccountsState>()
             .having((s) => s.status, 'status', RequestStatus.success)
             .having((s) => s.account?.id, 'id', 'acc-1'),
@@ -109,7 +129,9 @@ void main() {
       build: () {
         final list = MockGetTransactionsUseCase();
         final details = MockGetTransactionByIdUseCase();
-        when(() => list(any())).thenAnswer((_) async => Right([TestFixtures.transaction]));
+        when(
+          () => list(any()),
+        ).thenAnswer((_) async => Right([TestFixtures.transaction]));
         return TransactionsBloc(
           getTransactionsUseCase: list,
           getTransactionByIdUseCase: details,
@@ -117,8 +139,16 @@ void main() {
       },
       act: (bloc) => bloc.add(const TransactionsLoaded()),
       expect: () => [
-        isA<TransactionsState>().having((s) => s.listStatus, 'status', RequestStatus.loading),
-        isA<TransactionsState>().having((s) => s.transactions.length, 'count', 1),
+        isA<TransactionsState>().having(
+          (s) => s.listStatus,
+          'status',
+          RequestStatus.loading,
+        ),
+        isA<TransactionsState>().having(
+          (s) => s.transactions.length,
+          'count',
+          1,
+        ),
       ],
     );
   });
@@ -137,24 +167,30 @@ void main() {
     });
 
     TransferBloc build() => TransferBloc(
-          getAccountsUseCase: accounts,
-          getTransferBeneficiariesUseCase: beneficiaries,
-          transferMoneyUseCase: transfer,
-          addBeneficiaryUseCase: addBeneficiary,
-        );
+      getAccountsUseCase: accounts,
+      getTransferBeneficiariesUseCase: beneficiaries,
+      transferMoneyUseCase: transfer,
+      addBeneficiaryUseCase: addBeneficiary,
+    );
 
     blocTest<TransferBloc, TransferState>(
       'loads accounts and beneficiaries',
       build: () {
-        when(() => accounts(any()))
-            .thenAnswer((_) async => const Right([TestFixtures.account]));
-        when(() => beneficiaries(any()))
-            .thenAnswer((_) async => const Right([TestFixtures.beneficiary]));
+        when(
+          () => accounts(any()),
+        ).thenAnswer((_) async => const Right([TestFixtures.account]));
+        when(
+          () => beneficiaries(any()),
+        ).thenAnswer((_) async => const Right([TestFixtures.beneficiary]));
         return build();
       },
       act: (bloc) => bloc.add(const TransferLoaded()),
       expect: () => [
-        isA<TransferState>().having((s) => s.loadStatus, 'status', RequestStatus.loading),
+        isA<TransferState>().having(
+          (s) => s.loadStatus,
+          'status',
+          RequestStatus.loading,
+        ),
         isA<TransferState>()
             .having((s) => s.loadStatus, 'status', RequestStatus.success)
             .having((s) => s.accounts.length, 'accounts', 1),
@@ -175,7 +211,11 @@ void main() {
         ),
       ),
       expect: () => [
-        isA<TransferState>().having((s) => s.submitStatus, 'status', RequestStatus.loading),
+        isA<TransferState>().having(
+          (s) => s.submitStatus,
+          'status',
+          RequestStatus.loading,
+        ),
         isA<TransferState>()
             .having((s) => s.submitStatus, 'status', RequestStatus.success)
             .having((s) => s.successMessage, 'msg', 'Transfer successful'),
@@ -191,7 +231,8 @@ void main() {
         final details = MockGetCardByIdUseCase();
         final freeze = MockToggleCardFreezeUseCase();
         when(() => freeze(any())).thenAnswer(
-          (_) async => Right(TestFixtures.card.copyWith(status: CardStatus.frozen)),
+          (_) async =>
+              Right(TestFixtures.card.copyWith(status: CardStatus.frozen)),
         );
         return CardsBloc(
           getCardsUseCase: list,
@@ -201,8 +242,16 @@ void main() {
       },
       act: (bloc) => bloc.add(const CardFreezeToggled('card-1')),
       expect: () => [
-        isA<CardsState>().having((s) => s.freezeStatus, 'status', RequestStatus.loading),
-        isA<CardsState>().having((s) => s.freezeStatus, 'status', RequestStatus.success),
+        isA<CardsState>().having(
+          (s) => s.freezeStatus,
+          'status',
+          RequestStatus.loading,
+        ),
+        isA<CardsState>().having(
+          (s) => s.freezeStatus,
+          'status',
+          RequestStatus.success,
+        ),
       ],
     );
   });
@@ -213,7 +262,9 @@ void main() {
       build: () {
         final qr = MockGetQrPaymentDataUseCase();
         final bill = MockSubmitBillPaymentUseCase();
-        when(() => qr(any())).thenAnswer((_) async => Right(TestFixtures.qrPaymentData));
+        when(
+          () => qr(any()),
+        ).thenAnswer((_) async => Right(TestFixtures.qrPaymentData));
         return PaymentsBloc(
           getQrPaymentDataUseCase: qr,
           submitBillPaymentUseCase: bill,
@@ -221,10 +272,18 @@ void main() {
       },
       act: (bloc) => bloc.add(const QrPaymentLoaded()),
       expect: () => [
-        isA<PaymentsState>().having((s) => s.qrStatus, 'status', RequestStatus.loading),
+        isA<PaymentsState>().having(
+          (s) => s.qrStatus,
+          'status',
+          RequestStatus.loading,
+        ),
         isA<PaymentsState>()
             .having((s) => s.qrStatus, 'status', RequestStatus.success)
-            .having((s) => s.qrPaymentData?.iban, 'iban', TestFixtures.account.iban),
+            .having(
+              (s) => s.qrPaymentData?.iban,
+              'iban',
+              TestFixtures.account.iban,
+            ),
       ],
     );
 
@@ -233,8 +292,9 @@ void main() {
       build: () {
         final qr = MockGetQrPaymentDataUseCase();
         final bill = MockSubmitBillPaymentUseCase();
-        when(() => bill(any()))
-            .thenAnswer((_) async => futureLeft(FailureFixtures.unauthorized));
+        when(
+          () => bill(any()),
+        ).thenAnswer((_) async => futureLeft(FailureFixtures.unauthorized));
         return PaymentsBloc(
           getQrPaymentDataUseCase: qr,
           submitBillPaymentUseCase: bill,
@@ -244,8 +304,16 @@ void main() {
         const BillPaymentSubmitted(amount: 100, billType: 'electricity'),
       ),
       expect: () => [
-        isA<PaymentsState>().having((s) => s.billStatus, 'status', RequestStatus.loading),
-        isA<PaymentsState>().having((s) => s.errorMessage, 'error', FailureFixtures.unauthorized.message),
+        isA<PaymentsState>().having(
+          (s) => s.billStatus,
+          'status',
+          RequestStatus.loading,
+        ),
+        isA<PaymentsState>().having(
+          (s) => s.errorMessage,
+          'error',
+          FailureFixtures.unauthorized.message,
+        ),
       ],
     );
   });
@@ -256,7 +324,9 @@ void main() {
       build: () {
         final get = MockGetNotificationsUseCase();
         final mark = MockMarkNotificationReadUseCase();
-        when(() => get(any())).thenAnswer((_) async => Right([TestFixtures.notification]));
+        when(
+          () => get(any()),
+        ).thenAnswer((_) async => Right([TestFixtures.notification]));
         return NotificationsBloc(
           getNotificationsUseCase: get,
           markNotificationReadUseCase: mark,
@@ -264,8 +334,16 @@ void main() {
       },
       act: (bloc) => bloc.add(const NotificationsLoaded()),
       expect: () => [
-        isA<NotificationsState>().having((s) => s.status, 'status', RequestStatus.loading),
-        isA<NotificationsState>().having((s) => s.notifications.length, 'count', 1),
+        isA<NotificationsState>().having(
+          (s) => s.status,
+          'status',
+          RequestStatus.loading,
+        ),
+        isA<NotificationsState>().having(
+          (s) => s.notifications.length,
+          'count',
+          1,
+        ),
       ],
     );
   });
@@ -275,14 +353,23 @@ void main() {
       'loads profile data',
       build: () {
         final useCase = MockGetProfileDataUseCase();
-        when(() => useCase(any())).thenAnswer((_) async => Right(TestFixtures.profileData));
+        when(
+          () => useCase(any()),
+        ).thenAnswer((_) async => Right(TestFixtures.profileData));
         return ProfileBloc(getProfileDataUseCase: useCase);
       },
       act: (bloc) => bloc.add(const ProfileLoaded()),
       expect: () => [
-        isA<ProfileState>().having((s) => s.status, 'status', RequestStatus.loading),
-        isA<ProfileState>()
-            .having((s) => s.profileData?.user.name, 'name', TestFixtures.user.name),
+        isA<ProfileState>().having(
+          (s) => s.status,
+          'status',
+          RequestStatus.loading,
+        ),
+        isA<ProfileState>().having(
+          (s) => s.profileData?.user.name,
+          'name',
+          TestFixtures.user.name,
+        ),
       ],
     );
   });
@@ -294,7 +381,9 @@ void main() {
         final get = MockGetSettingsUseCase();
         final theme = MockSetThemeModeUseCase();
         final locale = MockSetLocaleUseCase();
-        when(() => get(any())).thenAnswer((_) async => Right(TestFixtures.settingsBundle));
+        when(
+          () => get(any()),
+        ).thenAnswer((_) async => Right(TestFixtures.settingsBundle));
         return SettingsBloc(
           getSettingsUseCase: get,
           setThemeModeUseCase: theme,
@@ -303,7 +392,11 @@ void main() {
       },
       act: (bloc) => bloc.add(const SettingsLoaded()),
       expect: () => [
-        isA<SettingsState>().having((s) => s.status, 'status', RequestStatus.loading),
+        isA<SettingsState>().having(
+          (s) => s.status,
+          'status',
+          RequestStatus.loading,
+        ),
         isA<SettingsState>()
             .having((s) => s.themeMode, 'theme', ThemeMode.light)
             .having((s) => s.locale.languageCode, 'locale', 'en'),
@@ -326,8 +419,16 @@ void main() {
       seed: () => const SettingsState(locale: Locale('en')),
       act: (bloc) => bloc.add(const LocaleChanged(Locale('ar'))),
       expect: () => [
-        isA<SettingsState>().having((s) => s.status, 'status', RequestStatus.loading),
-        isA<SettingsState>().having((s) => s.locale.languageCode, 'locale', 'ar'),
+        isA<SettingsState>().having(
+          (s) => s.status,
+          'status',
+          RequestStatus.loading,
+        ),
+        isA<SettingsState>().having(
+          (s) => s.locale.languageCode,
+          'locale',
+          'ar',
+        ),
       ],
     );
   });

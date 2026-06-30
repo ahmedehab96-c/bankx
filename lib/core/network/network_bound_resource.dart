@@ -12,10 +12,10 @@ class NetworkBoundResource<T> {
     required Future<T> Function() fetchRemote,
     required Future<T?> Function() fetchLocal,
     required Future<void> Function(T data) saveLocal,
-  })  : _networkInfo = networkInfo,
-        _fetchRemote = fetchRemote,
-        _fetchLocal = fetchLocal,
-        _saveLocal = saveLocal;
+  }) : _networkInfo = networkInfo,
+       _fetchRemote = fetchRemote,
+       _fetchLocal = fetchLocal,
+       _saveLocal = saveLocal;
 
   final NetworkInfo _networkInfo;
   final Future<T> Function() _fetchRemote;
@@ -54,7 +54,7 @@ class NetworkBoundResource<T> {
 /// For write operations (transfer, bill pay) — remote only, no cache fallback.
 class RemoteResource {
   RemoteResource({required NetworkInfo networkInfo})
-      : _networkInfo = networkInfo;
+    : _networkInfo = networkInfo;
 
   final NetworkInfo _networkInfo;
 

@@ -6,7 +6,7 @@ import '../api_error_mapper.dart';
 /// Converts [DioException] into typed [AppException]s before they reach repositories.
 class ErrorInterceptor extends ApiInterceptor {
   ErrorInterceptor({ApiErrorMapper? mapper})
-      : _mapper = mapper ?? const ApiErrorMapper();
+    : _mapper = mapper ?? const ApiErrorMapper();
 
   final ApiErrorMapper _mapper;
 

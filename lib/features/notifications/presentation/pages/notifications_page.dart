@@ -34,9 +34,9 @@ class NotificationsScreen extends StatelessWidget {
             title: Text(l10n.notifications),
             actions: [
               TextButton(
-                onPressed: () => context
-                    .read<NotificationsBloc>()
-                    .add(const AllNotificationsMarkedRead()),
+                onPressed: () => context.read<NotificationsBloc>().add(
+                  const AllNotificationsMarkedRead(),
+                ),
                 child: Text(l10n.markAllRead),
               ),
             ],
@@ -68,9 +68,9 @@ class NotificationsScreen extends StatelessWidget {
                       : Color(n.color).withValues(alpha: 0.06),
                   borderRadius: BorderRadius.circular(16),
                   child: InkWell(
-                    onTap: () => context
-                        .read<NotificationsBloc>()
-                        .add(NotificationMarkedRead(i)),
+                    onTap: () => context.read<NotificationsBloc>().add(
+                      NotificationMarkedRead(i),
+                    ),
                     borderRadius: BorderRadius.circular(16),
                     child: Padding(
                       padding: const EdgeInsets.all(16),

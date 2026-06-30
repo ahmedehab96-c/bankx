@@ -38,7 +38,11 @@ class AppButton extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               if (icon != null) ...[
-                Icon(icon, size: 20, color: isOutlined ? AppColors.primaryBlue : Colors.white),
+                Icon(
+                  icon,
+                  size: 20,
+                  color: isOutlined ? AppColors.primaryBlue : Colors.white,
+                ),
                 const SizedBox(width: 8),
               ],
               Text(

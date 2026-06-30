@@ -6,8 +6,8 @@ class ConnectivityService {
   ConnectivityService({
     Connectivity? connectivity,
     InternetConnection? internetChecker,
-  })  : _connectivity = connectivity ?? Connectivity(),
-        _internetChecker = internetChecker ?? InternetConnection();
+  }) : _connectivity = connectivity ?? Connectivity(),
+       _internetChecker = internetChecker ?? InternetConnection();
 
   final Connectivity _connectivity;
   final InternetConnection _internetChecker;

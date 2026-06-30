@@ -231,7 +231,9 @@ void main() {
 
   group('ProfileScreen', () {
     testWidgets('renders profile header', (tester) async {
-      final profileBloc = ProfileBloc(getProfileDataUseCase: MockGetProfileDataUseCase());
+      final profileBloc = ProfileBloc(
+        getProfileDataUseCase: MockGetProfileDataUseCase(),
+      );
       final authBloc = AuthBloc(
         loginUseCase: MockLoginUseCase(),
         logoutUseCase: MockLogoutUseCase(),

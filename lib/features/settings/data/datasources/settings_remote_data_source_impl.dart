@@ -43,9 +43,7 @@ class SettingsRemoteDataSourceImpl implements SettingsRemoteDataSource {
   Future<void> syncLocale(Locale locale) async {
     try {
       final current = await _readOrDefault();
-      await _api.updateSettings(
-        current.copyWith(locale: locale.languageCode),
-      );
+      await _api.updateSettings(current.copyWith(locale: locale.languageCode));
       await _cache.write(
         CacheKeys.settings,
         current.copyWith(locale: locale.languageCode).toJson(),
@@ -62,8 +60,8 @@ class SettingsRemoteDataSourceImpl implements SettingsRemoteDataSource {
   }
 
   static String _themeToString(ThemeMode mode) => switch (mode) {
-        ThemeMode.light => 'light',
-        ThemeMode.dark => 'dark',
-        ThemeMode.system => 'system',
-      };
+    ThemeMode.light => 'light',
+    ThemeMode.dark => 'dark',
+    ThemeMode.system => 'system',
+  };
 }

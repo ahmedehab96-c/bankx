@@ -10,9 +10,9 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
   NotificationsBloc({
     required GetNotificationsUseCase getNotificationsUseCase,
     required MarkNotificationReadUseCase markNotificationReadUseCase,
-  })  : _getNotificationsUseCase = getNotificationsUseCase,
-        _markNotificationReadUseCase = markNotificationReadUseCase,
-        super(const NotificationsState()) {
+  }) : _getNotificationsUseCase = getNotificationsUseCase,
+       _markNotificationReadUseCase = markNotificationReadUseCase,
+       super(const NotificationsState()) {
     on<NotificationsLoaded>(_onNotificationsLoaded);
     on<NotificationMarkedRead>(_onNotificationMarkedRead);
     on<AllNotificationsMarkedRead>(_onAllNotificationsMarkedRead);

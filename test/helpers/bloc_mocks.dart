@@ -16,43 +16,72 @@ import 'package:mocktail/mocktail.dart';
 
 /// Mock use cases for bloc tests — keeps bloc tests decoupled from repositories.
 class MockLoginUseCase extends Mock implements LoginUseCase {}
+
 class MockLogoutUseCase extends Mock implements LogoutUseCase {}
+
 class MockRegisterUseCase extends Mock implements RegisterUseCase {}
+
 class MockVerifyOtpUseCase extends Mock implements VerifyOtpUseCase {}
+
 class MockResetPasswordUseCase extends Mock implements ResetPasswordUseCase {}
+
 class MockCheckAuthUseCase extends Mock implements CheckAuthUseCase {}
 
-class MockGetDashboardDataUseCase extends Mock implements GetDashboardDataUseCase {}
-class MockGetAnalyticsDataUseCase extends Mock implements GetAnalyticsDataUseCase {}
+class MockGetDashboardDataUseCase extends Mock
+    implements GetDashboardDataUseCase {}
+
+class MockGetAnalyticsDataUseCase extends Mock
+    implements GetAnalyticsDataUseCase {}
 
 class MockGetAccountByIdUseCase extends Mock implements GetAccountByIdUseCase {}
 
-class MockGetTransactionsUseCase extends Mock implements GetTransactionsUseCase {}
-class MockGetTransactionByIdUseCase extends Mock implements GetTransactionByIdUseCase {}
+class MockGetTransactionsUseCase extends Mock
+    implements GetTransactionsUseCase {}
+
+class MockGetTransactionByIdUseCase extends Mock
+    implements GetTransactionByIdUseCase {}
 
 class MockGetAccountsUseCase extends Mock implements GetAccountsUseCase {}
-class MockGetTransferBeneficiariesUseCase extends Mock implements GetTransferBeneficiariesUseCase {}
+
+class MockGetTransferBeneficiariesUseCase extends Mock
+    implements GetTransferBeneficiariesUseCase {}
+
 class MockTransferMoneyUseCase extends Mock implements TransferMoneyUseCase {}
+
 class MockAddBeneficiaryUseCase extends Mock implements AddBeneficiaryUseCase {}
 
 class MockGetCardsUseCase extends Mock implements GetCardsUseCase {}
+
 class MockGetCardByIdUseCase extends Mock implements GetCardByIdUseCase {}
-class MockToggleCardFreezeUseCase extends Mock implements ToggleCardFreezeUseCase {}
 
-class MockGetQrPaymentDataUseCase extends Mock implements GetQrPaymentDataUseCase {}
-class MockSubmitBillPaymentUseCase extends Mock implements SubmitBillPaymentUseCase {}
+class MockToggleCardFreezeUseCase extends Mock
+    implements ToggleCardFreezeUseCase {}
 
-class MockGetNotificationsUseCase extends Mock implements GetNotificationsUseCase {}
-class MockMarkNotificationReadUseCase extends Mock implements MarkNotificationReadUseCase {}
+class MockGetQrPaymentDataUseCase extends Mock
+    implements GetQrPaymentDataUseCase {}
+
+class MockSubmitBillPaymentUseCase extends Mock
+    implements SubmitBillPaymentUseCase {}
+
+class MockGetNotificationsUseCase extends Mock
+    implements GetNotificationsUseCase {}
+
+class MockMarkNotificationReadUseCase extends Mock
+    implements MarkNotificationReadUseCase {}
 
 class MockGetProfileDataUseCase extends Mock implements GetProfileDataUseCase {}
 
 class MockGetSettingsUseCase extends Mock implements GetSettingsUseCase {}
+
 class MockSetThemeModeUseCase extends Mock implements SetThemeModeUseCase {}
+
 class MockSetLocaleUseCase extends Mock implements SetLocaleUseCase {}
 
-class MockLoadSecuritySettingsUseCase extends Mock implements LoadSecuritySettingsUseCase {}
-class MockToggleBiometricUseCase extends Mock implements ToggleBiometricUseCase {}
+class MockLoadSecuritySettingsUseCase extends Mock
+    implements LoadSecuritySettingsUseCase {}
+
+class MockToggleBiometricUseCase extends Mock
+    implements ToggleBiometricUseCase {}
 
 /// Canonical failure fixtures for bloc failure-scenario tests.
 abstract final class FailureFixtures {
@@ -67,7 +96,9 @@ abstract final class FailureFixtures {
 
 void registerBlocTestFallbacks() {
   registerFallbackValue(const LoginParams(email: '', password: ''));
-  registerFallbackValue(const RegisterParams(name: '', email: '', password: ''));
+  registerFallbackValue(
+    const RegisterParams(name: '', email: '', password: ''),
+  );
   registerFallbackValue(const VerifyOtpParams(code: ''));
   registerFallbackValue(const ResetPasswordParams(email: ''));
   registerFallbackValue(const NoParams());
@@ -75,11 +106,7 @@ void registerBlocTestFallbacks() {
   registerFallbackValue(const GetTransactionsParams());
   registerFallbackValue(const GetTransactionByIdParams(''));
   registerFallbackValue(
-    const TransferMoneyParams(
-      fromAccountId: '',
-      beneficiaryId: '',
-      amount: 0,
-    ),
+    const TransferMoneyParams(fromAccountId: '', beneficiaryId: '', amount: 0),
   );
   registerFallbackValue(
     const AddBeneficiaryParams(name: '', bankName: '', accountNumber: ''),

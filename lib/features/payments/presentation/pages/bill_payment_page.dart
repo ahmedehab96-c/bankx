@@ -39,11 +39,11 @@ class _BillPaymentScreenState extends State<BillPaymentScreen> {
     if (amount == null || amount <= 0) return;
 
     context.read<PaymentsBloc>().add(
-          BillPaymentSubmitted(
-            amount: amount,
-            billType: _billTypes[_selectedCategory],
-          ),
-        );
+      BillPaymentSubmitted(
+        amount: amount,
+        billType: _billTypes[_selectedCategory],
+      ),
+    );
   }
 
   @override

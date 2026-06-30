@@ -105,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           scrollDirection: Axis.horizontal,
                           itemCount: data.accounts.length,
                           separatorBuilder: (context, index) =>
-                          const SizedBox(width: 14),
+                              const SizedBox(width: 14),
                           itemBuilder: (_, i) {
                             final acc = data.accounts[i];
                             return BankingCard(
@@ -179,19 +179,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (_, i) {
-                    final tx = data.recentTransactions[i];
-                    return Padding(
-                      padding: EdgeInsets.symmetric(horizontal: padding),
-                      child: TransactionTile(
-                        transaction: tx,
-                        onTap: () => context.pushTransactionDetails(tx.id),
-                      ),
-                    );
-                  },
-                  childCount: data.recentTransactions.length,
-                ),
+                delegate: SliverChildBuilderDelegate((_, i) {
+                  final tx = data.recentTransactions[i];
+                  return Padding(
+                    padding: EdgeInsets.symmetric(horizontal: padding),
+                    child: TransactionTile(
+                      transaction: tx,
+                      onTap: () => context.pushTransactionDetails(tx.id),
+                    ),
+                  );
+                }, childCount: data.recentTransactions.length),
               ),
               SliverToBoxAdapter(
                 child: Padding(
@@ -251,14 +248,14 @@ class _DashboardHeader extends StatelessWidget {
               Text(
                 greeting,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).hintColor,
-                    ),
+                  color: Theme.of(context).hintColor,
+                ),
               ),
               Text(
                 name,
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.w700,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
               ),
             ],
           ),

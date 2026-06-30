@@ -31,7 +31,9 @@ class BankStatementPdfGenerator {
           pw.SizedBox(height: 12),
           pw.Text('Account: $accountName'),
           pw.Text('Number: $accountNumber'),
-          pw.Text('Period: ${from.toIso8601String().split('T').first} — ${to.toIso8601String().split('T').first}'),
+          pw.Text(
+            'Period: ${from.toIso8601String().split('T').first} — ${to.toIso8601String().split('T').first}',
+          ),
           pw.SizedBox(height: 20),
           pw.TableHelper.fromTextArray(
             headers: const ['Date', 'Description', 'Amount', 'Status'],
@@ -96,7 +98,11 @@ class TransferReceiptPdfGenerator {
 /// Shares or prints generated PDF documents.
 class PdfShareService {
   Future<void> share(Uint8List bytes, String fileName) async {
-    final file = XFile.fromData(bytes, name: fileName, mimeType: 'application/pdf');
+    final file = XFile.fromData(
+      bytes,
+      name: fileName,
+      mimeType: 'application/pdf',
+    );
     await Share.shareXFiles([file], text: 'BankX document');
   }
 

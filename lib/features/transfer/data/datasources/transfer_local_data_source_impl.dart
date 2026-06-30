@@ -14,7 +14,9 @@ class TransferLocalDataSourceImpl implements TransferLocalDataSource {
   Future<List<BankAccount>?> getCachedAccounts() async {
     final items = await _cache.readList(CacheKeys.accounts);
     if (items == null) return null;
-    return items.map((e) => BankingMappers.toAccount(AccountDto.fromJson(e))).toList();
+    return items
+        .map((e) => BankingMappers.toAccount(AccountDto.fromJson(e)))
+        .toList();
   }
 
   @override

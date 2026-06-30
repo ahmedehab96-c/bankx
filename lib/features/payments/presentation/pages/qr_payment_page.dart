@@ -61,12 +61,12 @@ class _QrPaymentScreenState extends State<QrPaymentScreen>
               builder: (context, state) {
                 return _MyQrTab(
                   padding: padding,
-                  displayName: state.qrPaymentData?.user.name ?? 'Ahmed Mohammed',
+                  displayName:
+                      state.qrPaymentData?.user.name ?? 'Ahmed Mohammed',
                   qrData: state.qrPaymentData == null
                       ? null
                       : QrPaymentCodec.encodeReceive(
-                          accountNumber:
-                              state.qrPaymentData!.accountNumber,
+                          accountNumber: state.qrPaymentData!.accountNumber,
                           iban: state.qrPaymentData!.iban,
                           name: state.qrPaymentData!.user.name,
                         ),
@@ -172,10 +172,7 @@ class _MyQrTab extends StatelessWidget {
           const SizedBox(height: 24),
           Text(
             displayName,
-            style: GoogleFonts.inter(
-              fontSize: 20,
-              fontWeight: FontWeight.w700,
-            ),
+            style: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.w700),
           ),
           Text(
             'Scan to pay me',

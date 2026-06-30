@@ -79,18 +79,12 @@ GoRouter createAppRouter({
       return null;
     },
     routes: [
-      GoRoute(
-        path: AppRoutes.splash,
-        builder: (_, _) => const SplashScreen(),
-      ),
+      GoRoute(path: AppRoutes.splash, builder: (_, _) => const SplashScreen()),
       GoRoute(
         path: AppRoutes.onboarding,
         builder: (_, _) => const OnboardingScreen(),
       ),
-      GoRoute(
-        path: AppRoutes.login,
-        builder: (_, _) => const LoginScreen(),
-      ),
+      GoRoute(path: AppRoutes.login, builder: (_, _) => const LoginScreen()),
       GoRoute(
         path: AppRoutes.register,
         builder: (_, _) => const RegisterScreen(),
@@ -149,8 +143,7 @@ GoRouter createAppRouter({
         builder: (_, state) {
           final id = state.pathParameters['id']!;
           return BlocProvider(
-            create: (_) => getIt<AccountsBloc>()
-              ..add(AccountDetailsLoaded(id)),
+            create: (_) => getIt<AccountsBloc>()..add(AccountDetailsLoaded(id)),
             child: AccountDetailsScreen(accountId: id),
           );
         },
@@ -160,8 +153,8 @@ GoRouter createAppRouter({
         builder: (_, state) {
           final id = state.pathParameters['id']!;
           return BlocProvider(
-            create: (_) => getIt<TransactionsBloc>()
-              ..add(TransactionDetailsLoaded(id)),
+            create: (_) =>
+                getIt<TransactionsBloc>()..add(TransactionDetailsLoaded(id)),
             child: TransactionDetailsScreen(transactionId: id),
           );
         },
@@ -169,7 +162,8 @@ GoRouter createAppRouter({
       GoRoute(
         path: AppRoutes.transactionHistory,
         builder: (_, _) => BlocProvider(
-          create: (_) => getIt<TransactionsBloc>()..add(const TransactionsLoaded()),
+          create: (_) =>
+              getIt<TransactionsBloc>()..add(const TransactionsLoaded()),
           child: const TransactionHistoryScreen(),
         ),
       ),
@@ -183,7 +177,8 @@ GoRouter createAppRouter({
       GoRoute(
         path: AppRoutes.beneficiaries,
         builder: (_, _) => BlocProvider(
-          create: (_) => getIt<TransferBloc>()..add(const BeneficiariesLoaded()),
+          create: (_) =>
+              getIt<TransferBloc>()..add(const BeneficiariesLoaded()),
           child: const BeneficiariesScreen(),
         ),
       ),
@@ -265,7 +260,8 @@ GoRouter createAppRouter({
       GoRoute(
         path: AppRoutes.smartSearch,
         builder: (_, _) => BlocProvider(
-          create: (_) => getIt<TransactionsBloc>()..add(const TransactionsLoaded()),
+          create: (_) =>
+              getIt<TransactionsBloc>()..add(const TransactionsLoaded()),
           child: const SmartSearchPage(),
         ),
       ),

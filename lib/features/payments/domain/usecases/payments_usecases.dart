@@ -28,10 +28,7 @@ class GetQrPaymentDataUseCase implements UseCase<QrPaymentData, NoParams> {
 }
 
 class SubmitBillPaymentParams {
-  const SubmitBillPaymentParams({
-    required this.amount,
-    required this.billType,
-  });
+  const SubmitBillPaymentParams({required this.amount, required this.billType});
 
   final double amount;
   final String billType;
@@ -44,9 +41,6 @@ class SubmitBillPaymentUseCase
   final PaymentsRepository _repository;
 
   @override
-  ResultFuture<void> call(SubmitBillPaymentParams params) =>
-      _repository.submitBillPayment(
-        amount: params.amount,
-        billType: params.billType,
-      );
+  ResultFuture<void> call(SubmitBillPaymentParams params) => _repository
+      .submitBillPayment(amount: params.amount, billType: params.billType);
 }
