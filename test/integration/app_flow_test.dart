@@ -16,8 +16,8 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-import '../test/helpers/bloc_mocks.dart';
-import '../test/helpers/test_fixtures.dart';
+import '../helpers/bloc_mocks.dart';
+import '../helpers/test_fixtures.dart';
 
 /// Integration-style flow tests exercising blocs end-to-end with mocked use cases.
 /// These validate critical banking journeys without hitting real APIs.
