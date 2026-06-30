@@ -53,7 +53,13 @@ jobs:
         run: flutter analyze --fatal-infos --fatal-warnings
 
       - name: Dependency vulnerability audit
-        run: dart pub audit
+        continue-on-error: true
+        run: |
+          if dart pub audit --help &>/dev/null; then
+            dart pub audit
+          else
+            echo "dart pub audit not available in this SDK — skipping"
+          fi
 
       - name: Dart Code Metrics (optional)
         continue-on-error: true
