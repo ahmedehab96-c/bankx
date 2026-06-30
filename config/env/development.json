@@ -1,0 +1,15 @@
+{
+  "BANKX_ENV": "development",
+  "BANKX_API_BASE_URL": "https://api-dev.bankx.com/v1",
+  "FIREBASE_CONFIGURED": "false",
+  "BANKX_ENABLE_ANALYTICS": "true",
+  "BANKX_ENABLE_CRASHLYTICS": "false",
+  "BANKX_ENABLE_BIOMETRIC": "true",
+  "BANKX_ENABLE_OFFLINE_SYNC": "true",
+  "BANKX_ENABLE_AI": "true",
+  "BANKX_AI_PROVIDER": "mock",
+  "BANKX_AI_API_URL": "",
+  "BANKX_AI_API_KEY": "",
+  "BANKX_AI_MAX_TOKENS": "2048",
+  "BANKX_AI_CACHE_TTL_MINUTES": "30"
+}

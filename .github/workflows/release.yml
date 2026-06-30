@@ -1,0 +1,223 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Target environment
+        required: true
+        default: staging
+        type: choice
+        options:
+          - development
+          - staging
+          - production
+      bump:
+        description: Version bump type
+        required: true
+        default: patch
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+          - build
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  FLUTTER_VERSION: '3.27.0'
+  BANKX_ENV: ${{ github.event.inputs.environment || 'production' }}
+
+jobs:
+  version:
+    name: Version & changelog
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.bump.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Bump version
+        id: bump
+        run: |
+          chmod +x scripts/*.sh
+          ./scripts/bump_version.sh "${{ github.event.inputs.bump || 'build' }}"
+          VERSION=$(grep '^version:' pubspec.yaml | awk '{print $2}')
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Generate changelog
+        run: ./scripts/generate_changelog.sh
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-metadata
+          path: |
+            pubspec.yaml
+            CHANGELOG.md
+
+  build-android:
+    name: Android APK & AAB
+    runs-on: ubuntu-latest
+    needs: version
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-metadata
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            android/.gradle
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: gradle-${{ runner.os }}-
+
+      - name: Decode Android keystore
+        if: env.ANDROID_KEYSTORE_BASE64 != ''
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: |
+          echo "$ANDROID_KEYSTORE_BASE64" | base64 -d > android/app/upload-keystore.jks
+
+      - name: Build APK
+        env:
+          ANDROID_KEYSTORE_PATH: android/app/upload-keystore.jks
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          chmod +x scripts/*.sh
+          DEFINES=$(./scripts/load_env.sh "$BANKX_ENV")
+          flutter pub get
+          flutter build apk --release $DEFINES
+
+      - name: Build App Bundle
+        env:
+          ANDROID_KEYSTORE_PATH: android/app/upload-keystore.jks
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          DEFINES=$(./scripts/load_env.sh "$BANKX_ENV")
+          flutter build appbundle --release $DEFINES
+
+      - name: Generate release notes
+        run: |
+          VERSION=$(grep '^version:' pubspec.yaml | awk '{print $2}')
+          {
+            echo "# BankX $VERSION"
+            echo "Environment: $BANKX_ENV"
+            echo "Commit: ${{ github.sha }}"
+            echo "Build: ${{ github.run_number }}"
+            head -30 CHANGELOG.md 2>/dev/null || true
+          } > RELEASE_NOTES.md
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android-builds-${{ needs.version.outputs.version }}
+          path: |
+            build/app/outputs/flutter-apk/app-release.apk
+            build/app/outputs/bundle/release/app-release.aab
+            RELEASE_NOTES.md
+
+  build-ios:
+    name: iOS IPA
+    runs-on: macos-latest
+    needs: version
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-metadata
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+
+      - name: Install CocoaPods
+        run: |
+          cd ios && pod install --repo-update
+
+      - name: Import signing certificate
+        if: env.IOS_P12_BASE64 != ''
+        env:
+          IOS_P12_BASE64: ${{ secrets.IOS_P12_BASE64 }}
+          IOS_P12_PASSWORD: ${{ secrets.IOS_P12_PASSWORD }}
+        run: |
+          KEYCHAIN=build.keychain
+          security create-keychain -p "" "$KEYCHAIN"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN"
+          security unlock-keychain -p "" "$KEYCHAIN"
+          echo "$IOS_P12_BASE64" | base64 -d > certificate.p12
+          security import certificate.p12 -k "$KEYCHAIN" -P "$IOS_P12_PASSWORD" -T /usr/bin/codesign
+          security list-keychains -s "$KEYCHAIN"
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "" "$KEYCHAIN"
+
+      - name: Build IPA
+        run: |
+          chmod +x scripts/*.sh
+          DEFINES=$(./scripts/load_env.sh "$BANKX_ENV")
+          flutter pub get
+          flutter build ipa --release $DEFINES \
+            --export-options-plist=ios/ExportOptions.plist
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ios-build-${{ needs.version.outputs.version }}
+          path: build/ios/ipa/*.ipa
+
+  github-release:
+    name: GitHub Release
+    runs-on: ubuntu-latest
+    needs: [version, build-android, build-ios]
+    if: github.ref == 'refs/heads/main'
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: android-builds-${{ needs.version.outputs.version }}
+          path: dist/
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: ios-build-${{ needs.version.outputs.version }}
+          path: dist/
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ needs.version.outputs.version }}
+          name: BankX ${{ needs.version.outputs.version }}
+          body_path: dist/RELEASE_NOTES.md
+          files: |
+            dist/app-release.apk
+            dist/app-release.aab
+            dist/*.ipa
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

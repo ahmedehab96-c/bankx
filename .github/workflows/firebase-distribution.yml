@@ -1,0 +1,100 @@
+name: Firebase App Distribution
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Build environment
+        required: true
+        default: staging
+        type: choice
+        options:
+          - development
+          - staging
+      platform:
+        description: Platform
+        required: true
+        default: android
+        type: choice
+        options:
+          - android
+          - ios
+          - both
+
+env:
+  FLUTTER_VERSION: '3.27.0'
+
+jobs:
+  distribute:
+    name: Build & distribute (${{ inputs.platform }})
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools
+
+      - name: Build Android APK
+        if: inputs.platform == 'android' || inputs.platform == 'both'
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          if [[ -n "$ANDROID_KEYSTORE_BASE64" ]]; then
+            echo "$ANDROID_KEYSTORE_BASE64" | base64 -d > android/app/upload-keystore.jks
+            export ANDROID_KEYSTORE_PATH=android/app/upload-keystore.jks
+          fi
+          chmod +x scripts/*.sh
+          ./scripts/ci_build.sh android-apk "${{ inputs.environment }}"
+
+      - name: Distribute Android to Firebase
+        if: inputs.platform == 'android' || inputs.platform == 'both'
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        run: |
+          firebase appdistribution:distribute build/app/outputs/flutter-apk/app-release.apk \
+            --app "${{ secrets.FIREBASE_APP_ID_ANDROID }}" \
+            --groups "${{ vars.FIREBASE_TESTER_GROUPS || 'qa-testers' }}" \
+            --release-notes "BankX ${{ inputs.environment }} build #${{ github.run_number }}"
+
+  distribute-ios:
+    name: Build & distribute iOS
+    if: inputs.platform == 'ios' || inputs.platform == 'both'
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+
+      - run: npm install -g firebase-tools
+
+      - name: Build iOS IPA
+        run: |
+          chmod +x scripts/*.sh
+          ./scripts/ci_build.sh ios "${{ inputs.environment }}"
+
+      - name: Distribute iOS to Firebase
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        run: |
+          firebase appdistribution:distribute build/ios/ipa/*.ipa \
+            --app "${{ secrets.FIREBASE_APP_ID_IOS }}" \
+            --groups "${{ vars.FIREBASE_TESTER_GROUPS || 'qa-testers' }}" \
+            --release-notes "BankX ${{ inputs.environment }} iOS #${{ github.run_number }}"

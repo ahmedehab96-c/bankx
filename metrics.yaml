@@ -1,0 +1,27 @@
+# Dart Code Metrics (DCM) configuration — run via DCM CLI in CI.
+# Install: https://dcm.dev/docs/getting-started/
+# Command: dcm analyze lib test
+
+dart_code_metrics:
+  metrics:
+    cyclomatic-complexity: 20
+    number-of-parameters: 6
+    maximum-nesting-level: 5
+  metrics-exclude:
+    - test/**
+    - integration_test/**
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+  rules:
+    - avoid-dynamic
+    - avoid-passing-async-when-sync-expected
+    - avoid-redundant-async
+    - avoid-unnecessary-type-assertions
+    - avoid-unnecessary-type-casts
+    - no-boolean-literal-compare
+    - no-empty-block
+    - prefer-trailing-comma
+    - no-equal-then-else
+  rules-exclude:
+    - test/**
+    - integration_test/**
