@@ -1,11 +1,14 @@
 /**
- * BankX AI Proxy — keeps OpenAI API keys off mobile devices.
+ * BankX AI Proxy — keeps LLM API keys off mobile devices.
  *
  * Env:
- *   OPENAI_API_KEY  — required
- *   PORT            — default 8787
- *   PROXY_API_KEY   — optional client auth (Bearer token)
- *   OPENAI_MODEL    — default gpt-4o-mini
+ *   AI_PROVIDER       — openai | gemini (default: openai)
+ *   OPENAI_API_KEY    — OpenAI key (openai provider)
+ *   GEMINI_API_KEY    — Gemini key (gemini provider)
+ *   AI_UPSTREAM_URL   — optional override for chat completions URL
+ *   PORT              — default 8787
+ *   PROXY_API_KEY     — optional client auth (Bearer token)
+ *   OPENAI_MODEL      — default gpt-4o-mini / gemini-2.0-flash
  */
 
 const express = require('express');
@@ -14,13 +17,38 @@ const app = express();
 app.use(express.json({ limit: '1mb' }));
 
 const PORT = Number(process.env.PORT || 8787);
+const AI_PROVIDER = (process.env.AI_PROVIDER || 'openai').toLowerCase();
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-const PROXY_API_KEY = process.env.PROXY_API_KEY;
-const DEFAULT_MODEL = process.env.OPENAI_MODEL || 'gpt-4o-mini';
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const PROXY_API_KEY = (process.env.PROXY_API_KEY || '').trim();
 
-if (!OPENAI_API_KEY) {
-  console.error('Missing OPENAI_API_KEY');
+const upstreamConfig = resolveUpstream();
+const DEFAULT_MODEL = process.env.OPENAI_MODEL || upstreamConfig.defaultModel;
+
+if (!upstreamConfig.apiKey) {
+  console.error(
+    `Missing API key for provider "${AI_PROVIDER}" (set OPENAI_API_KEY or GEMINI_API_KEY)`,
+  );
   process.exit(1);
+}
+
+function resolveUpstream() {
+  if (AI_PROVIDER === 'gemini') {
+    return {
+      url:
+        process.env.AI_UPSTREAM_URL ||
+        'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',
+      apiKey: GEMINI_API_KEY,
+      defaultModel: 'gemini-2.0-flash',
+    };
+  }
+  return {
+    url:
+      process.env.AI_UPSTREAM_URL ||
+      'https://api.openai.com/v1/chat/completions',
+    apiKey: OPENAI_API_KEY,
+    defaultModel: 'gpt-4o-mini',
+  };
 }
 
 function auth(req, res, next) {
@@ -34,7 +62,12 @@ function auth(req, res, next) {
 }
 
 app.get('/health', (_req, res) => {
-  res.json({ status: 'ok', service: 'bankx-ai-proxy' });
+  res.json({
+    status: 'ok',
+    service: 'bankx-ai-proxy',
+    provider: AI_PROVIDER,
+    model: DEFAULT_MODEL,
+  });
 });
 
 app.post('/v1/chat/completions', auth, async (req, res) => {
@@ -46,11 +79,11 @@ app.post('/v1/chat/completions', auth, async (req, res) => {
       stream: Boolean(req.body.stream),
     };
 
-    const upstream = await fetch('https://api.openai.com/v1/chat/completions', {
+    const upstream = await fetch(upstreamConfig.url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${OPENAI_API_KEY}`,
+        Authorization: `Bearer ${upstreamConfig.apiKey}`,
       },
       body: JSON.stringify(body),
     });

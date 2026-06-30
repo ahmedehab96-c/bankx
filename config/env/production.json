@@ -7,13 +7,13 @@
   "BANKX_ENABLE_BIOMETRIC": "true",
   "BANKX_ENABLE_OFFLINE_SYNC": "true",
   "BANKX_ENABLE_AI": "true",
-  "BANKX_AI_PROVIDER": "openai",
-  "BANKX_AI_API_URL": "",
+  "BANKX_AI_PROVIDER": "http",
+  "BANKX_AI_API_URL": "https://bankx-ai-proxy-qagkupv2fq-uc.a.run.app/v1",
   "BANKX_AI_API_KEY": "",
-  "BANKX_AI_MODEL": "gpt-4o-mini",
+  "BANKX_AI_MODEL": "gemini-2.0-flash",
   "BANKX_AI_MAX_TOKENS": "2048",
   "BANKX_AI_CACHE_TTL_MINUTES": "30",
   "BANKX_AI_RAG_ENABLED": "true",
-  "BANKX_AI_CERT_PIN_ENABLED": "false",
-  "BANKX_AI_CERT_PINS": ""
+  "BANKX_AI_CERT_PIN_ENABLED": "true",
+  "BANKX_AI_CERT_PINS": "8fe1bdca39ce03148203b21b73431ccec27fef2193f12ef84a88a79cb94899f1"
 }

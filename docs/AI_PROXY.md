@@ -70,7 +70,24 @@ railway up
 
 Set env vars in Railway dashboard: `OPENAI_API_KEY`, `PROXY_API_KEY`, `OPENAI_MODEL`.
 
-Set env vars in Railway dashboard: `OPENAI_API_KEY`, `PROXY_API_KEY`, `OPENAI_MODEL`.
+Or use Gemini (no OpenAI billing):
+
+```bash
+export AI_PROVIDER=gemini
+export GEMINI_API_KEY=your-gemini-key
+export PROXY_API_KEY=your-proxy-secret
+```
+
+## Deploy (Gemini + Cloud Run — automated)
+
+`bankx-app-c0958` has no billing; use `mezo-food-app-a0710` or enable billing on BankX Firebase project:
+
+```bash
+chmod +x scripts/deploy_ai_proxy_gemini.sh
+./scripts/deploy_ai_proxy_gemini.sh
+```
+
+Secrets are stored in GCP Secret Manager (`bankx-gemini-api-key`, `bankx-proxy-api-key`).
 
 ## Certificate pinning (mobile)
 

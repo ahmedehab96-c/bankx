@@ -7,10 +7,10 @@
   "BANKX_ENABLE_BIOMETRIC": "true",
   "BANKX_ENABLE_OFFLINE_SYNC": "true",
   "BANKX_ENABLE_AI": "true",
-  "BANKX_AI_PROVIDER": "mock",
-  "BANKX_AI_API_URL": "",
+  "BANKX_AI_PROVIDER": "http",
+  "BANKX_AI_API_URL": "https://bankx-ai-proxy-qagkupv2fq-uc.a.run.app/v1",
   "BANKX_AI_API_KEY": "",
-  "BANKX_AI_MODEL": "gpt-4o-mini",
+  "BANKX_AI_MODEL": "gemini-2.0-flash",
   "BANKX_AI_MAX_TOKENS": "2048",
   "BANKX_AI_CACHE_TTL_MINUTES": "30"
 }
